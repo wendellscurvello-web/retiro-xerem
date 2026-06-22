@@ -852,7 +852,35 @@
         // =============================================================
         //  PERSISTENCE
         // =============================================================
-        function salvarDados() { try { localStorage.setItem('rama_retiro_pessoas_v2', JSON.stringify(pessoas)); } catch (e) {} }
+        function salvarDados() {
+            try { localStorage.setItem('rama_retiro_pessoas_v2', JSON.stringify(pessoas)); } catch (e) {}
+            sincronizarComServidor();
+        }
+
+        /** Envia os pagamentos para o Google Sheets (não bloqueia a tela) */
+        async function sincronizarComServidor() {
+            const url = localStorage.getItem('rama_webhook_url') || '';
+            if (!url) return;
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: 'savePagamentos',
+                        pessoas: pessoas.map(p => ({
+                            id: p.id,
+                            planoId: p.planoId || '',
+                            status: p.status || 'pendente',
+                            pagouEntrada: !!p.pagouEntrada,
+                            parcelasPagas: p.parcelasPagas || []
+                        }))
+                    })
+                });
+            } catch(e) {
+                console.warn('Sincronização em segundo plano falhou:', e.message);
+            }
+        }
 
         function carregarDados() {
             try {
@@ -1020,6 +1048,12 @@
             document.getElementById('appsScriptCode').textContent = appsScriptCode;
             renderizar();
             renderizarLog();
+
+            // Sincroniza automaticamente ao abrir o site, se webhook estiver configurado
+            const webhookSalvo = localStorage.getItem('rama_webhook_url') || '';
+            if (webhookSalvo) {
+                setTimeout(() => fetchFromWebhook(webhookSalvo, true), 800);
+            }
 
             // Log first access
             if (!localStorage.getItem('rama_retiro_primeiro_acesso')) {
@@ -1406,42 +1440,69 @@
             } else { fetchFromWebhook(url); }
         }
 
-        async function fetchFromWebhook(url) {
-            showToast('Importando...', 'warning');
+        async function fetchFromWebhook(url, silencioso) {
+            if (!silencioso) showToast('Sincronizando com Google Sheets...', 'warning');
             try {
                 const resp = await fetch(url + '?action=getInscricoes');
                 if (!resp.ok) throw new Error('HTTP ' + resp.status);
                 const data = await resp.json();
                 if (data && data.inscricoes && Array.isArray(data.inscricoes)) {
-                    let imp = 0;
+                    let novos = 0, atualizados = 0;
                     data.inscricoes.forEach(item => {
-                        if (pessoas.some(p => p.nome.toLowerCase() === (item.nome || '').toLowerCase() && p
-                            .idade === parseInt(item.idade))) return;
-                        if (!item.nome) return;
+                        if (!item.nome || !item.id) return;
                         const idade = parseInt(item.idade) || 0;
-                        const dt = item.dataInscricao ? new Date(item.dataInscricao) : new Date();
-                        const mes = dt.getMonth() + 1;
-                        const cn = getCotaByMes(mes);
-                        const tipo = getTipoPorIdade(idade);
-                        const ii = (tipo === 'isento'),
-                            im = (tipo === 'meia');
-                        const c = COTAS[cn];
-                        pessoas.push({
-                            id: gerarId(), nome: item.nome.trim(), idade,
-                            mes: (mes >= 6 && mes <= 10) ? mes : 6, cota: cn, meia: im, isento: ii,
-                            planoId: ii ? 'isento' : (c?.planos[0]?.id || c?.planos[0]?.id || ''),
-                            status: ii ? 'pago' : 'pendente', pagouEntrada: false, parcelasPagas: [],
-                            createdAt: new Date().toISOString(), imported: true
-                        });
-                        imp++;
+                        const mes   = parseInt(item.mes)   || 6;
+                        const cn    = item.cota || getCotaByMes(mes);
+                        const tipo  = getTipoPorIdade(idade);
+                        const ii    = (tipo === 'isento'), im = (tipo === 'meia');
+                        const c     = COTAS[cn];
+
+                        // Verifica se já existe pelo ID estável vindo do servidor
+                        const existente = pessoas.find(p => p.id === item.id);
+
+                        if (existente) {
+                            // Atualiza pagamentos com os dados do servidor (fonte de verdade)
+                            existente.planoId       = item.planoId       || existente.planoId;
+                            existente.status        = item.status        || existente.status;
+                            existente.pagouEntrada  = item.pagouEntrada  !== undefined ? item.pagouEntrada : existente.pagouEntrada;
+                            existente.parcelasPagas = item.parcelasPagas?.length ? item.parcelasPagas : existente.parcelasPagas;
+                            atualizados++;
+                        } else {
+                            // Inscrito novo — adiciona com todos os dados do servidor
+                            pessoas.push({
+                                id:            item.id,
+                                nome:          item.nome.trim(),
+                                idade:         idade,
+                                mes:           mes,
+                                cota:          cn,
+                                meia:          item.meia || im,
+                                isento:        ii,
+                                planoId:       item.planoId || (ii ? 'isento' : (c?.planos[0]?.id || '')),
+                                status:        item.status  || (ii ? 'pago' : 'pendente'),
+                                pagouEntrada:  item.pagouEntrada  || false,
+                                parcelasPagas: item.parcelasPagas || [],
+                                createdAt:     new Date().toISOString(),
+                                imported:      true
+                            });
+                            novos++;
+                        }
                     });
-                    salvarDados();
+                    // Salva localmente sem reenviar ao servidor (evita loop)
+                    try { localStorage.setItem('rama_retiro_pessoas_v2', JSON.stringify(pessoas)); } catch (e) {}
                     renderizar();
-                    addLog('info', 'Importação Google Sheets', `${imp} inscrito(s) importados do Google Forms.`);
-                    showToast(`${imp} importado(s)!`, 'success');
-                } else { showToast('Formato inesperado.', 'error'); }
-            } catch (err) { showToast('Erro: ' + err.message, 'error');
-                console.error(err); }
+                    const msg = `${novos} novo(s), ${atualizados} atualizado(s).`;
+                    addLog('info', 'Sincronização Google Sheets', msg);
+                    if (!silencioso) showToast('Sincronizado! ' + msg, 'success');
+                } else if (data && data.erro) {
+                    showToast('Erro da planilha: ' + data.erro, 'error');
+                    console.error('Erro do servidor:', data.erro);
+                } else {
+                    showToast('Formato inesperado na resposta.', 'error');
+                }
+            } catch (err) {
+                if (!silencioso) showToast('Erro ao sincronizar: ' + err.message, 'error');
+                console.error('fetchFromWebhook:', err);
+            }
         }
 
         // =============================================================
