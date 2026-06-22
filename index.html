@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ramá Xerém – Retiro de Carnaval</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        *,
+        *::before,
+        *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #8B0000; --primary-light: #B22222; --primary-dark: #5C0000;
+            --gold: #D4A843; --gold-light: #F0D080; --bg: #FAF7F2; --card: #FFFFFF;
+            --text: #1A1A2E; --text-muted: #6B7280; --success: #16A34A;
+            --warning: #EAB308; --danger: #DC2626; --info: #2563EB;
+            --border: #E5E7EB; --radius: 16px;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.1);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Playfair Display', serif;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+        a { color: var(--primary); text-decoration: none; }
+
+        /* HEADER */
+        .header { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%); color: #fff; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(139,0,0,0.3); }
+        .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .header-brand { display: flex; align-items: center; gap: 14px; }
+        .header-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; backdrop-filter: blur(4px); }
+        .header-title h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; }
+        .header-title span { font-size: 12px; opacity: 0.8; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; }
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .header-user { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 6px 14px 6px 10px; border-radius: 50px; font-size: 13px; cursor: pointer; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.15); }
+        .header-user:hover { background: rgba(255,255,255,0.2); }
+        .header-user .avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: var(--primary-dark); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+        .header-user .username { font-weight: 500; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .header-date { font-size: 13px; opacity: 0.85; display: none; }
+        .user-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 50px; font-size: 10px; font-weight: 600; background: rgba(255,255,255,0.15); color: #fff; }
+        @media (min-width: 640px) { .header-date { display: block; } }
+
+        /* HERO */
+        .hero { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; padding: 48px 24px 56px; text-align: center; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(212,168,67,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(255,255,255,0.05) 0%, transparent 60%); pointer-events: none; }
+        .hero-content { max-width: 800px; margin: 0 auto; position: relative; }
+        .hero-badge { display: inline-block; background: rgba(255,255,255,0.12); backdrop-filter: blur(8px); padding: 6px 18px; border-radius: 50px; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); }
+        .hero h2 { font-family: var(--font-display); font-size: clamp(32px,6vw,54px); font-weight: 700; line-height: 1.15; margin-bottom: 12px; }
+        .hero h2 .gold { color: var(--gold-light); }
+        .hero p { font-size: 18px; opacity: 0.85; max-width: 600px; margin: 0 auto 28px; }
+
+        /* STATS */
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 16px; max-width: 1100px; margin: -28px auto 0; padding: 0 24px; position: relative; z-index: 2; }
+        .stat-card { background: var(--card); border-radius: var(--radius); padding: 20px 16px; text-align: center; box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
+        .stat-card .number { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1.2; }
+        .stat-card .label { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+        .stat-card.stat-success .number { color: var(--success); }
+        .stat-card.stat-warning .number { color: var(--warning); }
+        .stat-card.stat-info .number { color: var(--info); }
+        .stat-card.stat-gold .number { color: var(--gold); }
+
+        /* CONTAINER */
+        .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; }
+
+        /* TABS */
+        .tabs { display: flex; gap: 4px; background: var(--card); border-radius: var(--radius); padding: 4px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .tab-btn { flex: 1; min-width: 100px; padding: 12px 20px; border: none; background: transparent; border-radius: 12px; font-family: var(--font-sans); font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all .25s; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .tab-btn:hover { color: var(--text); background: rgba(139,0,0,0.04); }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(139,0,0,0.25); }
+        .tab-btn .badge-tab { background: rgba(255,255,255,0.25); padding: 1px 10px; border-radius: 50px; font-size: 12px; font-weight: 600; }
+        .tab-btn.active .badge-tab { background: rgba(255,255,255,0.25); }
+        .tab-btn:not(.active) .badge-tab { background: var(--border); color: var(--text-muted); }
+
+        /* FILTERS */
+        .filter-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; align-items: center; }
+        .filter-row .filter-group { display: flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0 12px; font-size: 13px; }
+        .filter-row .filter-group label { font-weight: 500; color: var(--text-muted); font-size: 12px; white-space: nowrap; }
+        .filter-row .filter-group select, .filter-row .filter-group input { border: none; background: transparent; padding: 8px 0; font-family: var(--font-sans); font-size: 13px; outline: none; color: var(--text); min-width: 80px; }
+        .filter-row .filter-group select { cursor: pointer; }
+        .filter-row .filter-btn-clear { padding: 8px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-size: 12px; font-weight: 500; color: var(--text-muted); transition: all .2s; }
+        .filter-row .filter-btn-clear:hover { background: #fee2e2; border-color: var(--danger); color: var(--danger); }
+        .filter-row .filter-count { font-size: 13px; color: var(--text-muted); margin-left: auto; }
+        .filter-row .filter-count strong { color: var(--text); }
+
+        /* TABLE */
+        .table-container { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
+        .table-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+        .table-toolbar .search-box { display: flex; align-items: center; gap: 8px; background: var(--bg); border-radius: 10px; padding: 0 14px; flex: 1; min-width: 160px; border: 1px solid var(--border); }
+        .table-toolbar .search-box i { color: var(--text-muted); font-size: 14px; }
+        .table-toolbar .search-box input { border: none; background: transparent; padding: 10px 0; font-size: 14px; font-family: var(--font-sans); outline: none; width: 100%; color: var(--text); }
+        .toolbar-btn { display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; font-family: var(--font-sans); cursor: pointer; transition: all .2s; border: none; white-space: nowrap; }
+        .toolbar-btn.btn-primary { background: var(--primary); color: #fff; }
+        .toolbar-btn.btn-primary:hover { background: var(--primary-dark); }
+        .toolbar-btn.btn-outline { background: #fff; color: #333; border: 1px solid var(--border); }
+        .toolbar-btn.btn-outline:hover { background: #f8f8f8; border-color: #ccc; }
+        .toolbar-btn.btn-outline i.fa-google { color: #4285F4; }
+        .toolbar-btn.btn-bulk { background: #7C3AED; color: #fff; }
+        .toolbar-btn.btn-bulk:hover { background: #6D28D9; }
+        .toolbar-btn.btn-log { background: #0891B2; color: #fff; }
+        .toolbar-btn.btn-log:hover { background: #0E7490; }
+
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead { background: var(--bg); }
+        th { text-align: left; padding: 12px 14px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(139,0,0,0.02); }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; }
+        .status-badge.pago { background: #DCFCE7; color: #15803D; }
+        .status-badge.pendente { background: #FEF3C7; color: #92400E; }
+        .status-badge.parcial { background: #DBEAFE; color: #1E40AF; }
+        .tipo-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+        .tipo-badge.inteira { background: #F3E8FF; color: #7C3AED; }
+        .tipo-badge.meia { background: #E0F2FE; color: #0369A1; }
+        .tipo-badge.isento { background: #F0FDF4; color: #15803D; }
+        .cota-badge { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; font-weight: 700; font-size: 13px; color: #fff; }
+        .cota-badge.c1 { background: #7C3AED; }
+        .cota-badge.c2 { background: #2563EB; }
+        .cota-badge.c3 { background: var(--primary); }
+        .cota-badge.isento-tag { background: #16A34A; width: auto; padding: 0 10px; border-radius: 50px; font-size: 11px; }
+        .actions-cell { display: flex; gap: 6px; }
+        .actions-cell button { width: 34px; height: 34px; border: none; border-radius: 8px; background: transparent; cursor: pointer; font-size: 14px; color: var(--text-muted); transition: all .2s; display: flex; align-items: center; justify-content: center; }
+        .actions-cell button:hover { background: var(--bg); }
+        .actions-cell .btn-pay { color: var(--success); }
+        .actions-cell .btn-pay:hover { background: #DCFCE7; }
+        .actions-cell .btn-delete { color: var(--danger); }
+        .actions-cell .btn-delete:hover { background: #FEE2E2; }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .empty-state i { font-size: 48px; opacity: .3; margin-bottom: 16px; }
+        .empty-state h3 { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .modal { background: var(--card); border-radius: var(--radius); width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); padding: 32px; animation: modalIn .25s ease-out; }
+        .modal.wide { max-width: 750px; }
+        @keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .modal-header h2 { font-size: 22px; font-weight: 700; }
+        .modal-header .close-btn { width: 40px; height: 40px; border: none; border-radius: 10px; background: var(--bg); cursor: pointer; font-size: 18px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: all .2s; }
+        .modal-header .close-btn:hover { background: var(--danger); color: #fff; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+        .form-group label .required { color: var(--danger); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; font-family: var(--font-sans); font-size: 14px; background: var(--bg); transition: border .2s; outline: none; color: var(--text); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139,0,0,0.1); }
+        .form-group textarea { min-height: 200px; resize: vertical; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; }
+        .form-group .help-text { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .btn-submit { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; font-family: var(--font-sans); cursor: pointer; transition: background .2s; margin-top: 8px; }
+        .btn-submit:hover { background: var(--primary-dark); }
+        .btn-submit.success { background: var(--success); }
+        .btn-submit.success:hover { background: #15803D; }
+
+        /* PAY DETAIL */
+        .pay-detail { background: var(--bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .pay-detail .pay-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px dashed var(--border); }
+        .pay-detail .pay-row:last-child { border-bottom: none; }
+        .pay-detail .pay-row .label { color: var(--text-muted); }
+        .pay-detail .pay-row .value { font-weight: 600; }
+        .pay-detail .pay-row .value.gold { color: var(--gold); }
+        .pay-detail .pay-row .value.green { color: var(--success); }
+        .pay-detail .pay-row .value.red { color: var(--danger); }
+        .installment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px,1fr)); gap: 8px; margin-top: 12px; }
+        .installment-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 8px; background: var(--card); border: 1px solid var(--border); cursor: pointer; transition: all .2s; font-size: 11px; }
+        .installment-item.paid { background: #DCFCE7; border-color: var(--success); color: var(--success); }
+        .installment-item.pending { background: #FEF3C7; border-color: var(--warning); color: #92400E; }
+        .installment-item:hover { transform: scale(1.05); }
+        .installment-item .inst-num { font-weight: 700; font-size: 13px; }
+
+        /* LOG VIEW */
+        .log-container { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
+        .log-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .log-header h3 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .log-header h3 i { color: #0891B2; }
+        .log-header .log-actions { display: flex; gap: 8px; }
+        .log-item { display: flex; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: flex-start; }
+        .log-item:last-child { border-bottom: none; }
+        .log-item:hover { background: rgba(0,0,0,0.01); }
+        .log-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .log-icon.add { background: #DCFCE7; color: #15803D; }
+        .log-icon.delete { background: #FEE2E2; color: #DC2626; }
+        .log-icon.payment { background: #DBEAFE; color: #1E40AF; }
+        .log-icon.edit { background: #FEF3C7; color: #92400E; }
+        .log-icon.bulk { background: #F3E8FF; color: #7C3AED; }
+        .log-icon.info { background: #E0F2FE; color: #0891B2; }
+        .log-content { flex: 1; min-width: 0; }
+        .log-content .log-title { font-weight: 600; font-size: 14px; }
+        .log-content .log-desc { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        .log-content .log-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .log-content .log-meta .log-user { background: var(--bg); padding: 1px 8px; border-radius: 4px; font-weight: 500; }
+        .log-empty { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .log-empty i { font-size: 48px; opacity: .2; margin-bottom: 12px; }
+
+        /* GOOGLE SETUP */
+        .google-setup { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 32px; }
+        .google-setup h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .google-setup h3 i { color: #4285F4; }
+        .google-setup p { color: var(--text-muted); margin-bottom: 16px; font-size: 14px; }
+        .hosting-card { background: var(--bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 16px; }
+        .hosting-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .hosting-card h4 .free-tag { background: var(--success); color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 4px; }
+        .hosting-card ol, .hosting-card ul { margin-left: 20px; font-size: 14px; color: var(--text); line-height: 1.8; }
+        .hosting-card li { margin-bottom: 4px; }
+        .code-block { background: #1E1E2E; color: #CDD6F4; border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono','Fira Code',monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; white-space: pre-wrap; word-break: break-word; margin-bottom: 16px; position: relative; }
+        .code-block .copy-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: var(--font-sans); }
+        .code-block .copy-btn:hover { background: rgba(255,255,255,0.2); }
+        .step-list { list-style: none; counter-reset: step; }
+        .step-list li { counter-increment: step; padding: 14px 0 14px 44px; position: relative; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .step-list li::before { content: counter(step); position: absolute; left: 0; top: 12px; width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+        .step-list li:last-child { border-bottom: none; }
+        .step-list li strong { color: var(--primary); }
+
+        /* TOAST */
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: var(--card); border-radius: 12px; padding: 14px 20px; box-shadow: var(--shadow-lg); border-left: 4px solid var(--success); font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px; animation: toastIn .3s ease-out; max-width: 400px; }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+        .bulk-preview { background: var(--bg); border-radius: 10px; padding: 12px 16px; margin: 12px 0; max-height: 200px; overflow-y: auto; font-size: 13px; border: 1px solid var(--border); }
+        .bulk-preview .preview-item { padding: 4px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .bulk-preview .preview-item:last-child { border-bottom: none; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-inner { height: 60px; padding: 0 12px; }
+            .header-title h1 { font-size: 14px; }
+            .header-title span { font-size: 9px; }
+            .header-icon { width: 32px; height: 32px; font-size: 16px; }
+            .header-user { padding: 4px 10px 4px 6px; font-size: 11px; }
+            .header-user .avatar { width: 22px; height: 22px; font-size: 10px; }
+            .header-user .username { max-width: 70px; }
+            .hero { padding: 32px 16px 40px; }
+            .hero p { font-size: 14px; }
+            .stats-row { grid-template-columns: repeat(2,1fr); gap: 10px; padding: 0 16px; margin-top: -20px; }
+            .stat-card { padding: 14px 10px; }
+            .stat-card .number { font-size: 22px; }
+            .container { padding: 20px 16px 60px; }
+            .tabs { gap: 2px; padding: 3px; }
+            .tab-btn { padding: 10px 10px; font-size: 11px; min-width: 60px; }
+            .filter-row { flex-direction: column; align-items: stretch; }
+            .filter-row .filter-count { margin-left: 0; }
+            .table-toolbar { flex-direction: column; align-items: stretch; padding: 12px 14px; }
+            .table-toolbar .search-box { min-width: auto; }
+            .table-toolbar .toolbar-btn { justify-content: center; }
+            th, td { padding: 10px 8px; font-size: 12px; }
+            .modal { padding: 24px 20px; }
+            .modal.wide { padding: 20px 16px; }
+            .form-row { grid-template-columns: 1fr; }
+            .toast-container { left: 16px; right: 16px; bottom: 16px; }
+            .toast { max-width: 100%; }
+            .hide-mobile { display: none; }
+            .log-header { flex-direction: column; align-items: stretch; }
+        }
+        @media (max-width: 480px) {
+            .stats-row { grid-template-columns: repeat(2,1fr); }
+            th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5) { display: none; }
+        }
+        @media print {
+            .header, .hero, .tabs, .filter-row, .table-toolbar, .actions-cell, .no-print { display: none !important; }
+            .container { padding: 0; }
+            .table-container { box-shadow: none; border: 1px solid #ddd; }
+            body { background: #fff; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="header-brand">
+                <div class="header-icon"><i class="fas fa-cross"></i></div>
+                <div class="header-title">
+                    <h1>Ramá Xerém</h1>
+                    <span>Retiro de Carnaval</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <span class="header-date"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
+                <div class="header-user" onclick="openUserModal()" title="Clique para identificar-se">
+                    <div class="avatar" id="userAvatar">?</div>
+                    <span class="username" id="userNameDisplay">Identificar</span>
+                </div>
+                <button onclick="window.print()" title="Imprimir" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge"><i class="fas fa-ticket-alt"></i> Controle de Pagamentos</div>
+            <h2>Retiro de <span class="gold">Carnaval</span></h2>
+            <p id="heroUserText">Acompanhe todas as inscrições, cotas e pagamentos. Tudo registrado com transparência.</p>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-row" id="statsRow">
+        <div class="stat-card"><div class="number" id="statTotal">0</div><div class="label">Inscritos</div></div>
+        <div class="stat-card stat-success"><div class="number" id="statPago">0</div><div class="label">Pagos</div></div>
+        <div class="stat-card stat-warning"><div class="number" id="statPendente">0</div><div class="label">Pendentes</div></div>
+        <div class="stat-card stat-info"><div class="number" id="statIsentos">0</div><div class="label">Isentos</div></div>
+        <div class="stat-card stat-gold"><div class="number" id="statArrecadado">R$ 0</div><div class="label">Arrecadado</div></div>
+    </div>
+
+    <!-- MAIN -->
+    <main class="container">
+
+        <!-- TABS -->
+        <div class="tabs" id="tabsContainer">
+            <button class="tab-btn active" data-view="inscritos"><i class="fas fa-users"></i> Inscritos <span class="badge-tab" id="badgeTodas">0</span></button>
+            <button class="tab-btn" data-view="log"><i class="fas fa-history"></i> Atividades <span class="badge-tab" id="badgeLog">0</span></button>
+            <button class="tab-btn" data-view="config"><i class="fas fa-cog"></i> Config</button>
+        </div>
+
+        <!-- ===== VIEW: INSCRITOS ===== -->
+        <div id="viewInscritos">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label><i class="fas fa-filter"></i> Status:</label>
+                    <select id="filtroStatus">
+                        <option value="todos">Todos</option>
+                        <option value="pago">Pago</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="parcial">Parcial</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label><i class="fas fa-child"></i> Tipo:</label>
+                    <select id="filtroTipo">
+                        <option value="todos">Todos</option>
+                        <option value="inteira">Inteira</option>
+                        <option value="meia">Meia</option>
+                        <option value="isento">Isento</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label><i class="fas fa-credit-card"></i> Parcelas:</label>
+                    <select id="filtroParcelas">
+                        <option value="todas">Todas</option>
+                        <option value="0">0 pagas</option>
+                        <option value="1">1 paga</option>
+                        <option value="2">2 pagas</option>
+                        <option value="3">3 pagas</option>
+                        <option value="4">4 pagas</option>
+                        <option value="5">5 pagas</option>
+                        <option value="6">6 pagas</option>
+                        <option value="7">7 pagas</option>
+                        <option value="completo">Todas pagas</option>
+                    </select>
+                </div>
+                <button class="filter-btn-clear" onclick="limparFiltros()"><i class="fas fa-times"></i> Limpar</button>
+                <span class="filter-count"><strong id="resultCount">0</strong> resultado(s)</span>
+            </div>
+
+            <div class="table-container">
+                <div class="table-toolbar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Buscar por nome..." />
+                    </div>
+                    <button class="toolbar-btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> Novo</button>
+                    <button class="toolbar-btn btn-bulk" onclick="openBulkModal()"><i class="fas fa-paste"></i> Massa</button>
+                    <button class="toolbar-btn btn-outline" onclick="importFromSheet()"><i class="fab fa-google"></i> Importar</button>
+                    <button class="toolbar-btn btn-log" onclick="switchToLog()"><i class="fas fa-history"></i> Log</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Idade</th>
+                                <th>Tipo</th>
+                                <th>Cota</th>
+                                <th class="hide-mobile">Plano</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th class="hide-mobile">Parcelas</th>
+                                <th style="width:80px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+                <div id="emptyState" class="empty-state" style="display:none;">
+                    <i class="fas fa-inbox"></i>
+                    <h3>Nenhum inscrito encontrado</h3>
+                    <p>Adicione manualmente, importe do Google Forms ou cadastre em massa.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== VIEW: LOG ===== -->
+        <div id="viewLog" style="display:none;">
+            <div class="log-container">
+                <div class="log-header">
+                    <h3><i class="fas fa-history"></i> Registro de Atividades</h3>
+                    <div class="log-actions">
+                        <button class="toolbar-btn btn-outline" onclick="exportLog()" style="padding:8px 14px;font-size:12px;">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                        <button class="toolbar-btn btn-outline" onclick="clearLog()" style="padding:8px 14px;font-size:12px;">
+                            <i class="fas fa-trash-alt"></i> Limpar
+                        </button>
+                    </div>
+                </div>
+                <div id="logList"></div>
+                <div id="logEmpty" class="log-empty" style="display:none;">
+                    <i class="fas fa-history"></i>
+                    <h3>Nenhuma atividade registrada</h3>
+                    <p>As ações de cadastro, pagamento e remoção aparecerão aqui.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== VIEW: CONFIG ===== -->
+        <div id="viewConfig" style="display:none;">
+            <div class="google-setup">
+
+                <!-- SEÇÃO: HOSPEDAGEM GRATUITA -->
+                <h3 style="margin-bottom:16px;"><i class="fas fa-globe"></i> Como publicar de graça</h3>
+                <p>Para que toda a equipe da gestão acesse o mesmo site e os dados fiquem sincronizados, siga um dos planos abaixo. Ambos são <strong>100% gratuitos</strong>.</p>
+
+                <div class="hosting-card">
+                    <h4><i class="fab fa-github" style="color:#333;"></i> Plano 1: GitHub Pages + Google Sheets <span class="free-tag">GRÁTIS</span></h4>
+                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Ideal para equipes. O site fica online e os dados são salvos numa planilha do Google que todos podem acessar.</p>
+                    <ol>
+                        <li><strong>Crie uma conta no <a href="https://github.com" target="_blank">GitHub.com</a></strong> (é grátis)</li>
+                        <li>Crie um <strong>novo repositório</strong> com o nome <code>rama-xerem-retiro</code></li>
+                        <li>Faça o upload do arquivo <code>index.html</code> para o repositório</li>
+                        <li>Vá em <strong>Settings → Pages</strong> e ative o GitHub Pages (branch: main, pasta: /root)</li>
+                        <li>Pronto! Seu site estará em <code>https://SEUUSUARIO.github.io/rama-xerem-retiro</code></li>
+                        <li>Compartilhe esse link com a equipe! 🎉</li>
+                    </ol>
+                    <p style="margin-top:10px;font-size:13px;font-weight:500;background:#EFF6FF;padding:10px;border-radius:8px;">
+                        <i class="fas fa-info-circle" style="color:#2563EB;"></i>
+                        <strong>Dica:</strong> Cada pessoa da equipe deve clicar no nome no canto superior direito e <strong>se identificar</strong> — assim todas as ações ficarão registradas com o nome de cada um!
+                    </p>
+                </div>
+
+                <div class="hosting-card">
+                    <h4><i class="fas fa-sync-alt" style="color:#4285F4;"></i> Sincronizando dados com Google Sheets <span class="free-tag">GRÁTIS</span></h4>
+                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Compartilhe uma planilha do Google entre a equipe. Todos veem os mesmos dados em tempo real.</p>
+                    <ol>
+                        <li><strong>Compartilhe a planilha</strong> de respostas do Google Forms com a equipe</li>
+                        <li>Cada pessoa acessa o <strong>mesmo link do site</strong> publicado no GitHub Pages</li>
+                        <li>Vá na aba <strong>"Importar"</strong> e cole a URL do Google Apps Script</li>
+                        <li>Clique em <strong>Importar</strong> para sincronizar os dados</li>
+                    </ol>
+                    <p style="margin-top:10px;font-size:13px;color:var(--text-muted);">
+                        <i class="fas fa-lightbulb" style="color:var(--gold);"></i> 
+                        Cada pessoa importa os dados ao acessar. Os pagamentos são gerenciados manualmente (cada um marca no seu navegador). Para sincronização completa, veja o Plano 2.
+                    </p>
+                </div>
+
+                <div class="hosting-card">
+                    <h4><i class="fas fa-database" style="color:#FF6B35;"></i> Plano 2: Firebase (para sincronia em tempo real) <span class="free-tag">GRÁTIS</span></h4>
+                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Usa o banco de dados gratuito do Google (Firebase). Todos veem e alteram os mesmos dados <strong>em tempo real</strong>.</p>
+                    <ol>
+                        <li>Crie uma conta no <a href="https://firebase.google.com" target="_blank">Firebase</a> (grátis, plano Spark)</li>
+                        <li>Crie um projeto e ative <strong>Firestore Database</strong> (modo teste)</li>
+                        <li>Ative <strong>Firebase Hosting</strong> e faça o deploy do <code>index.html</code></li>
+                        <li>O Firebase salva os dados no banco e todos os usuários compartilham os mesmos dados</li>
+                    </ol>
+                    <p style="margin-top:10px;font-size:13px;color:#92400E;background:#FEF3C7;padding:10px;border-radius:8px;">
+                        <i class="fas fa-tools"></i> 
+                        Este plano exige configurar o Firebase (adicionar SDK). Posso ajudar se quiser!
+                    </p>
+                </div>
+
+                <div style="margin-top:24px;padding:20px;background:#F0FDF4;border-radius:12px;border:1px solid #BBF7D0;">
+                    <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+                        <i class="fas fa-check-circle" style="color:var(--success);"></i> Resumo — O que fazer agora?
+                    </h4>
+                    <ol style="font-size:14px;line-height:2;">
+                        <li>📁 <strong>Baixe o arquivo</strong> <code>index.html</code> deste site</li>
+                        <li>🐙 <strong>Crie uma conta no GitHub</strong> (se não tiver)</li>
+                        <li>📤 <strong>Faça upload</strong> do <code>index.html</code> no GitHub</li>
+                        <li>🌐 <strong>Ative o GitHub Pages</strong> nas configurações do repositório</li>
+                        <li>📨 <strong>Compartilhe o link</strong> com a equipe de gestão</li>
+                        <li>👤 <strong>Cada um se identifica</strong> clicando no nome no topo</li>
+                        <li>📋 <strong>Todas as ações ficam registradas</strong> no Log de Atividades!</li>
+                    </ol>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:32px 0;" />
+
+                <h3><i class="fab fa-google"></i> Integração com Google Forms / Sheets</h3>
+                <p>Importe automaticamente os inscritos do seu formulário Google. As inscrições de <strong>Junho</strong> vão para a <strong>1ª Cota</strong>, <strong>Julho</strong> para a <strong>2ª Cota</strong>, <strong>Outubro</strong> para a <strong>3ª Cota</strong>.</p>
+
+                <h4 style="margin-bottom:12px;font-size:15px;font-weight:600;"><i class="fas fa-code"></i> Código Google Apps Script</h4>
+                <p style="font-size:13px;margin-bottom:10px;">Copie e cole no editor do Google Apps Script vinculado à sua planilha.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyAppsScript()"><i class="fas fa-copy"></i> Copiar</button>
+                    <code id="appsScriptCode"></code>
+                </div>
+
+                <h4 style="margin:24px 0 12px;font-size:15px;font-weight:600;"><i class="fas fa-list-ol"></i> Passo a Passo</h4>
+                <ol class="step-list">
+                    <li>Crie um <strong>Google Forms</strong> com: <em>Nome</em>, <em>Idade</em>, <em>Data de Inscrição</em></li>
+                    <li>Na planilha de respostas, vá em <strong>Extensões → Apps Script</strong></li>
+                    <li>Cole o código ao lado e salve (Ctrl+S)</li>
+                    <li>Configure o <strong>gatilho</strong>: "Ao enviar formulário" → função "importarDados"</li>
+                    <li>Autorize o script na primeira execução</li>
+                </ol>
+
+                <div style="margin-top:24px;padding:20px;background:#EFF6FF;border-radius:12px;border:1px solid #BFDBFE;">
+                    <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+                        <i class="fas fa-database" style="color:#2563EB;"></i> Gerenciar Dados
+                    </h4>
+                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
+                        Os dados ficam salvos no navegador de cada um. Para compartilhar, use o GitHub Pages + Google Sheets.
+                    </p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <button onclick="exportJSON()" style="padding:10px 18px;background:#2563EB;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;"><i class="fas fa-download"></i> Exportar JSON</button>
+                        <button onclick="importJSON()" style="padding:10px 18px;background:#fff;color:#2563EB;border:1px solid #2563EB;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;"><i class="fas fa-upload"></i> Importar JSON</button>
+                        <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="handleJSONImport(event)" />
+                        <button onclick="clearAllData()" style="padding:10px 18px;background:#fff;color:var(--danger);border:1px solid var(--danger);border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;"><i class="fas fa-trash-alt"></i> Limpar Tudo</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;padding:16px;background:#F3E8FF;border-radius:12px;border:1px solid #E9D5FF;">
+                    <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;"><i class="fas fa-flask"></i> Carregar Exemplos</h4>
+                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Adicione dados de exemplo para testar o sistema.</p>
+                    <button onclick="loadSampleData()" style="padding:10px 18px;background:#7C3AED;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;"><i class="fas fa-play"></i> Carregar Exemplos</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL IDENTIFICAR USUÁRIO -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-circle"></i> Identifique-se</h2>
+                <button class="close-btn" onclick="closeUserModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">
+                Informe seu nome para que todas as suas ações fiquem registradas no histórico de atividades. Isso traz <strong>transparência</strong> para a gestão.
+            </p>
+            <form onsubmit="return salvarIdentificacao(event)">
+                <div class="form-group">
+                    <label>Seu nome <span class="required">*</span></label>
+                    <input type="text" id="inputUserName" required placeholder="Ex: Pr. João" maxlength="30" />
+                    <div class="help-text">Este nome aparecerá no registro de atividades.</div>
+                </div>
+                <button type="submit" class="btn-submit"><i class="fas fa-check"></i> Confirmar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ADICIONAR -->
+    <div class="modal-overlay" id="addModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Novo Inscrito</h2>
+                <button class="close-btn" onclick="closeAddModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="addForm" onsubmit="return savePerson(event)">
+                <div class="form-group">
+                    <label>Nome completo <span class="required">*</span></label>
+                    <input type="text" id="inputNome" required placeholder="Ex: Maria da Silva" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Idade <span class="required">*</span></label>
+                        <input type="number" id="inputIdade" required min="0" max="120" placeholder="Ex: 25" />
+                        <div class="help-text" id="idadeHelpText">0-5 Isento | 6-10 Meia | 11+ Inteira</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Mês da inscrição <span class="required">*</span></label>
+                        <select id="inputMes">
+                            <option value="6">Junho — 1ª Cota (R$ 350)</option>
+                            <option value="7">Julho — 2ª Cota (R$ 400)</option>
+                            <option value="10">Outubro — 3ª Cota (R$ 450)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Plano de pagamento <span class="required">*</span></label>
+                    <select id="inputPlano"></select>
+                    <div class="help-text" id="planoHelpText"></div>
+                </div>
+                <div class="form-group" id="entradaGroup" style="display:none;">
+                    <label>Entrada</label>
+                    <input type="text" id="inputEntrada" readonly style="background:#eee;" />
+                </div>
+                <div class="form-group">
+                    <label>Status do pagamento</label>
+                    <select id="inputStatus">
+                        <option value="pendente">Pendente</option>
+                        <option value="parcial">Parcialmente Pago</option>
+                        <option value="pago">Pago</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Salvar Inscrito</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL INSCRIÇÃO EM MASSA -->
+    <div class="modal-overlay" id="bulkModal">
+        <div class="modal wide">
+            <div class="modal-header">
+                <h2><i class="fas fa-users"></i> Inscrição em Massa</h2>
+                <button class="close-btn" onclick="closeBulkModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">
+                Cole os dados copiados da sua planilha. <strong>Formato:</strong> uma pessoa por linha, <strong>Nome; Idade</strong>.
+            </p>
+            <div class="form-group">
+                <label>Cole os dados aqui <span class="required">*</span></label>
+                <textarea id="bulkTextarea" placeholder="Maria da Silva; 25&#10;João Pedro; 30&#10;Ana Clara; 4&#10;Lucas; 8"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Mês da inscrição <span class="required">*</span></label>
+                    <select id="bulkMes">
+                        <option value="6">Junho — 1ª Cota</option>
+                        <option value="7">Julho — 2ª Cota</option>
+                        <option value="10">Outubro — 3ª Cota</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status padrão</label>
+                    <select id="bulkStatus">
+                        <option value="pendente">Pendente</option>
+                        <option value="parcial">Parcial</option>
+                        <option value="pago">Pago</option>
+                    </select>
+                </div>
+            </div>
+            <div id="bulkPreviewContainer" style="display:none;">
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">
+                    <i class="fas fa-eye"></i> Prévia (<span id="bulkPreviewCount">0</span> pessoas)
+                </label>
+                <div class="bulk-preview" id="bulkPreview"></div>
+            </div>
+            <button class="btn-submit success" onclick="processarCadastroEmMassa()">
+                <i class="fas fa-users"></i> Cadastrar Todos
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL PAGAMENTO -->
+    <div class="modal-overlay" id="payModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-credit-card"></i> Detalhes do Pagamento</h2>
+                <button class="close-btn" onclick="closePayModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="payModalBody"></div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // =============================================================
+        //  CONFIG
+        // =============================================================
+        const COTAS = {
+            1: { nome: '1ª Cota', valorInteiro: 350, valorMeia: 175,
+                planos: [{ id: '7x50', label: '7x de R$ 50', parcelas: 7, valorParcela: 50, entrada: 0 }], meses: [6] },
+            2: { nome: '2ª Cota', valorInteiro: 400, valorMeia: 200,
+                planos: [{ id: 'entrada+6x50', label: 'Entrada R$ 100 + 6x R$ 50', parcelas: 6, valorParcela: 50, entrada: 100 }], meses: [7] },
+            3: { nome: '3ª Cota', valorInteiro: 450, valorMeia: 225,
+                planos: [
+                    { id: 'avista', label: 'À vista (R$ 450)', parcelas: 1, valorParcela: 450, entrada: 0 },
+                    { id: '2x225', label: '2x de R$ 225', parcelas: 2, valorParcela: 225, entrada: 0 }
+                ], meses: [10] }
+        };
+
+        function getTipoPorIdade(idade) { return idade <= 5 ? 'isento' : idade <= 10 ? 'meia' : 'inteira'; }
+
+        // =============================================================
+        //  STATE
+        // =============================================================
+        let pessoas = [];
+        let logAtividades = [];
+        let usuarioAtual = '';
+
+        // =============================================================
+        //  HELPERS
+        // =============================================================
+        function getCotaByMes(mes) { for (const [k, v] of Object.entries(COTAS)) { if (v.meses.includes(parseInt(mes))) return parseInt(k); } return 1; }
+
+        function getValorPorPessoa(p) { if (p.isento) return 0; const c = COTAS[p.cota]; return c ? (p.meia ? c.valorMeia : c.valorInteiro) : 0; }
+
+        function getValorTotalPago(p) {
+            if (p.isento || p.status === 'pendente') return 0;
+            if (p.status === 'pago') return getValorPorPessoa(p);
+            if (p.status === 'parcial') {
+                let pg = 0;
+                if (p.parcelasPagas) {
+                    const pl = COTAS[p.cota]?.planos.find(x => x.id === p.planoId);
+                    if (pl) pg = p.parcelasPagas.length * pl.valorParcela + (pl.entrada > 0 && p.pagouEntrada ? pl.entrada : 0);
+                }
+                return pg;
+            }
+            return 0;
+        }
+
+        function formatMoney(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+
+        function gerarId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+
+        function escHtml(s) { const d = document.createElement('div');
+            d.textContent = s; return d.innerHTML; }
+
+        function getUsuario() { return usuarioAtual || 'Anônimo'; }
+
+        // =============================================================
+        //  LOG DE ATIVIDADES
+        // =============================================================
+        function addLog(tipo, titulo, descricao) {
+            const entry = {
+                id: gerarId(),
+                tipo: tipo, // 'add', 'delete', 'payment', 'edit', 'bulk', 'info'
+                titulo: titulo,
+                descricao: descricao,
+                usuario: getUsuario(),
+                timestamp: new Date().toISOString(),
+                data: new Date().toLocaleString('pt-BR')
+            };
+            logAtividades.unshift(entry);
+            if (logAtividades.length > 500) logAtividades = logAtividades.slice(0, 500);
+            salvarLog();
+            renderizarLog();
+            document.getElementById('badgeLog').textContent = logAtividades.length;
+        }
+
+        function salvarLog() { try { localStorage.setItem('rama_retiro_log', JSON.stringify(logAtividades)); } catch (e) {} }
+
+        function carregarLog() {
+            try {
+                const raw = localStorage.getItem('rama_retiro_log');
+                if (raw) logAtividades = JSON.parse(raw);
+            } catch (e) { logAtividades = []; }
+        }
+
+        function renderizarLog() {
+            const list = document.getElementById('logList');
+            const empty = document.getElementById('logEmpty');
+            document.getElementById('badgeLog').textContent = logAtividades.length;
+
+            if (logAtividades.length === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+            list.innerHTML = logAtividades.map(l => {
+                const iconMap = { add: 'fa-plus-circle add', delete: 'fa-trash-alt delete',
+                    payment: 'fa-credit-card payment', edit: 'fa-pen edit',
+                    bulk: 'fa-users bulk', info: 'fa-info-circle info' };
+                const ic = iconMap[l.tipo] || 'fa-info-circle info';
+                const [icClass, icColor] = ic.split(' ');
+                return `
+                    <div class="log-item">
+                        <div class="log-icon ${icColor}"><i class="fas ${icClass}"></i></div>
+                        <div class="log-content">
+                            <div class="log-title">${escHtml(l.titulo)}</div>
+                            <div class="log-desc">${escHtml(l.descricao)}</div>
+                            <div class="log-meta">
+                                <span class="log-user"><i class="fas fa-user"></i> ${escHtml(l.usuario)}</span>
+                                <span><i class="far fa-clock"></i> ${l.data}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function exportLog() {
+            const txt = logAtividades.map(l =>
+                `[${l.data}] ${l.usuario} — ${l.titulo}: ${l.descricao}`
+            ).join('\n');
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rama-retiro-log.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Log exportado!', 'success');
+        }
+
+        function clearLog() {
+            if (!confirm('Limpar todo o histórico de atividades?')) return;
+            logAtividades = [];
+            salvarLog();
+            renderizarLog();
+            showToast('Histórico limpo.', 'warning');
+        }
+
+        // =============================================================
+        //  USER IDENTIFICATION
+        // =============================================================
+        function openUserModal() {
+            document.getElementById('userModal').classList.add('open');
+            document.getElementById('inputUserName').value = usuarioAtual || '';
+            document.getElementById('inputUserName').focus();
+        }
+
+        function closeUserModal() { document.getElementById('userModal').classList.remove('open'); }
+
+        document.getElementById('userModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('userModal')) closeUserModal();
+        });
+
+        function salvarIdentificacao(e) {
+            e.preventDefault();
+            const nome = document.getElementById('inputUserName').value.trim();
+            if (!nome) { showToast('Informe seu nome.', 'error'); return; }
+            usuarioAtual = nome;
+            try { localStorage.setItem('rama_retiro_usuario', nome); } catch (e) {}
+            atualizarInterfaceUsuario();
+            closeUserModal();
+            addLog('info', 'Usuário identificado', `${nome} começou a usar o sistema.`);
+            showToast(`Bem-vindo(a), ${nome}! 🎉`, 'success');
+            return false;
+        }
+
+        function atualizarInterfaceUsuario() {
+            const display = document.getElementById('userNameDisplay');
+            const avatar = document.getElementById('userAvatar');
+            if (usuarioAtual) {
+                display.textContent = usuarioAtual;
+                avatar.textContent = usuarioAtual.charAt(0).toUpperCase();
+                document.getElementById('heroUserText').textContent =
+                    `Olá, ${usuarioAtual}! Acompanhe as inscrições, cotas e pagamentos. Todas as ações ficam registradas.`;
+            } else {
+                display.textContent = 'Identificar';
+                avatar.textContent = '?';
+                document.getElementById('heroUserText').textContent =
+                    'Acompanhe todas as inscrições, cotas e pagamentos. Clique no seu nome no topo para se identificar.';
+            }
+        }
+
+        // =============================================================
+        //  PERSISTENCE
+        // =============================================================
+        function salvarDados() { try { localStorage.setItem('rama_retiro_pessoas_v2', JSON.stringify(pessoas)); } catch (e) {} }
+
+        function carregarDados() {
+            try {
+                const raw = localStorage.getItem('rama_retiro_pessoas_v2') || localStorage.getItem('rama_retiro_pessoas');
+                if (raw) {
+                    pessoas = JSON.parse(raw);
+                    pessoas.forEach(p => {
+                        if (p.isento === undefined) { const t = getTipoPorIdade(p.idade || 0);
+                            p.isento = (t === 'isento'); if (p.isento) p.meia = false; else if (t === 'meia') p.meia =
+                            true; }
+                        if (p.pagouEntrada === undefined) p.pagouEntrada = false;
+                    });
+                }
+            } catch (e) { pessoas = []; }
+        }
+
+        // =============================================================
+        //  FILTERS
+        // =============================================================
+        function getFiltros() { return { status: document.getElementById('filtroStatus').value, tipo: document.getElementById(
+                    'filtroTipo').value, parcelas: document.getElementById('filtroParcelas').value }; }
+
+        function limparFiltros() {
+            document.getElementById('filtroStatus').value = 'todos';
+            document.getElementById('filtroTipo').value = 'todos';
+            document.getElementById('filtroParcelas').value = 'todas';
+            renderizar();
+        }
+
+        function getPessoasFiltradas() {
+            let lista = [...pessoas];
+            const busca = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+            if (busca) lista = lista.filter(p => p.nome.toLowerCase().includes(busca));
+            const f = getFiltros();
+            if (f.status !== 'todos') lista = lista.filter(p => p.status === f.status);
+            if (f.tipo !== 'todos') {
+                if (f.tipo === 'isento') lista = lista.filter(p => p.isento);
+                else if (f.tipo === 'meia') lista = lista.filter(p => p.meia && !p.isento);
+                else if (f.tipo === 'inteira') lista = lista.filter(p => !p.meia && !p.isento);
+            }
+            if (f.parcelas !== 'todas') {
+                if (f.parcelas === 'completo') {
+                    lista = lista.filter(p => {
+                        const c = COTAS[p.cota];
+                        const pl = c?.planos.find(x => x.id === p.planoId);
+                        return pl && (p.parcelasPagas?.length || 0) >= pl.parcelas;
+                    });
+                } else { const n = parseInt(f.parcelas);
+                    lista = lista.filter(p => (p.parcelasPagas?.length || 0) === n); }
+            }
+            return lista;
+        }
+
+        // =============================================================
+        //  RENDER
+        // =============================================================
+        function renderizar() {
+            const lista = getPessoasFiltradas();
+            const tbody = document.getElementById('tableBody');
+            const empty = document.getElementById('emptyState');
+            document.getElementById('resultCount').textContent = lista.length;
+            if (lista.length === 0) { tbody.innerHTML = '';
+                empty.style.display = 'block'; } else { empty.style.display = 'none';
+                tbody.innerHTML = lista.map(p => renderRow(p)).join(''); }
+            renderizarStats();
+            document.getElementById('badgeTodas').textContent = pessoas.length;
+        }
+
+        function renderRow(p) {
+            const cota = COTAS[p.cota];
+            if (!cota) return '';
+            const isIsento = p.isento || false;
+            const valor = isIsento ? 0 : getValorPorPessoa(p);
+            const valorStr = isIsento ? 'Isento' : formatMoney(valor);
+            let tCls = 'inteira',
+                tLbl = 'Inteira';
+            if (isIsento) { tCls = 'isento';
+                tLbl = 'Isento'; } else if (p.meia) { tCls = 'meia';
+                tLbl = 'Meia'; }
+            let sCls = 'pendente',
+                sIcn = 'fa-clock',
+                sLbl = 'Pendente';
+            if (isIsento) { sCls = 'pago';
+                sIcn = 'fa-check-circle';
+                sLbl = 'Isento'; } else if (p.status === 'pago') { sCls = 'pago';
+                sIcn = 'fa-check-circle';
+                sLbl = 'Pago'; } else if (p.status === 'parcial') { sCls = 'parcial';
+                sIcn = 'fa-hourglass-half';
+                sLbl = 'Parcial'; }
+            const plano = cota.planos.find(pl => pl.id === p.planoId);
+            const parInfo = isIsento ? '-' : (plano ? `${p.parcelasPagas?.length||0}/${plano.parcelas}` : '-');
+            const plLabel = isIsento ? '-' : (plano ? plano.label : '-');
+            const cotaEx = isIsento ? `<span class="cota-badge isento-tag">Isento</span>` :
+                `<span class="cota-badge c${p.cota}">${p.cota}ª</span>`;
+            const idad = p.idade !== null && p.idade !== undefined ? p.idade + ' anos' : '-';
+            return `
+                <tr>
+                    <td><strong>${escHtml(p.nome)}</strong></td>
+                    <td>${idad}</td>
+                    <td><span class="tipo-badge ${tCls}">${tLbl}</span></td>
+                    <td>${cotaEx}</td>
+                    <td class="hide-mobile">${escHtml(plLabel)}</td>
+                    <td><strong>${valorStr}</strong></td>
+                    <td><span class="status-badge ${sCls}"><i class="fas ${sIcn}"></i> ${sLbl}</span></td>
+                    <td class="hide-mobile">${parInfo}</td>
+                    <td>
+                        <div class="actions-cell">
+                            ${isIsento ? `<button class="btn-pay" onclick="showToast('${escHtml(p.nome)} é isento(a).','info')" title="Isento"><i class="fas fa-check-circle"></i></button>`
+                            : `<button class="btn-pay" onclick="abrirPagamento('${p.id}')" title="Pagamento"><i class="fas fa-credit-card"></i></button>`}
+                            <button class="btn-delete" onclick="deletarPessoa('${p.id}')" title="Remover"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function renderizarStats() {
+            const t = pessoas.length;
+            const pg = pessoas.filter(p => p.status === 'pago' || p.isento).length;
+            const pe = pessoas.filter(p => !p.isento && (p.status === 'pendente' || p.status === 'parcial')).length;
+            const is = pessoas.filter(p => p.isento).length;
+            let ar = 0;
+            pessoas.forEach(p => { if (p.isento) return; if (p.status === 'pago') ar += getValorPorPessoa(p); else if (p
+                    .status === 'parcial') ar += getValorTotalPago(p); });
+            document.getElementById('statTotal').textContent = t;
+            document.getElementById('statPago').textContent = pg;
+            document.getElementById('statPendente').textContent = pe;
+            document.getElementById('statIsentos').textContent = is;
+            document.getElementById('statArrecadado').textContent = formatMoney(ar);
+        }
+
+        // =============================================================
+        //  TABS / VIEWS
+        // =============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('tabsContainer').addEventListener('click', (e) => {
+                const btn = e.target.closest('.tab-btn');
+                if (!btn) return;
+                const view = btn.dataset.view;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                ['viewInscritos', 'viewLog', 'viewConfig'].forEach(id => {
+                    document.getElementById(id).style.display = (id === 'view' + view.charAt(0).toUpperCase() +
+                        view.slice(1)) ? 'block' : 'none';
+                });
+            });
+
+            document.getElementById('searchInput').addEventListener('input', renderizar);
+            document.getElementById('filtroStatus').addEventListener('change', renderizar);
+            document.getElementById('filtroTipo').addEventListener('change', renderizar);
+            document.getElementById('filtroParcelas').addEventListener('change', renderizar);
+
+            const now = new Date();
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('pt-BR', { weekday: 'long',
+                year: 'numeric', month: 'long', day: 'numeric' });
+
+            // Load user
+            try { const u = localStorage.getItem('rama_retiro_usuario'); if (u) usuarioAtual = u; } catch (e) {}
+            atualizarInterfaceUsuario();
+
+            carregarDados();
+            carregarLog();
+            document.getElementById('inputMes').value = '6';
+            atualizarPlanos();
+            document.getElementById('appsScriptCode').textContent = appsScriptCode;
+            renderizar();
+            renderizarLog();
+
+            // Log first access
+            if (!localStorage.getItem('rama_retiro_primeiro_acesso')) {
+                try { localStorage.setItem('rama_retiro_primeiro_acesso', '1'); } catch (e) {}
+                addLog('info', 'Sistema iniciado', 'O sistema de controle do Retiro de Carnaval foi aberto.');
+            }
+        });
+
+        function switchToLog() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-view="log"]').classList.add('active');
+            document.getElementById('viewInscritos').style.display = 'none';
+            document.getElementById('viewLog').style.display = 'block';
+            document.getElementById('viewConfig').style.display = 'none';
+        }
+
+        // =============================================================
+        //  ADD MODAL
+        // =============================================================
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('open');
+            document.getElementById('addForm').reset();
+            document.getElementById('inputMes').value = '6';
+            document.getElementById('entradaGroup').style.display = 'none';
+            atualizarPlanos();
+        }
+
+        function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
+        document.getElementById('addModal').addEventListener('click', e => { if (e.target === document.getElementById(
+                    'addModal')) closeAddModal(); });
+        document.getElementById('payModal').addEventListener('click', e => { if (e.target === document.getElementById(
+                    'payModal')) closePayModal(); });
+        document.getElementById('bulkModal').addEventListener('click', e => { if (e.target === document.getElementById(
+                    'bulkModal')) closeBulkModal(); });
+
+        // =============================================================
+        //  PLANOS
+        // =============================================================
+        function atualizarPlanos() {
+            const mes = parseInt(document.getElementById('inputMes').value);
+            const cotaNum = getCotaByMes(mes);
+            const cota = COTAS[cotaNum];
+            const idade = parseInt(document.getElementById('inputIdade').value) || 0;
+            const tipo = getTipoPorIdade(idade);
+            const isIsento = (tipo === 'isento'),
+                isMeia = (tipo === 'meia');
+            const sel = document.getElementById('inputPlano');
+            sel.innerHTML = '';
+            const ht = document.getElementById('planoHelpText');
+            document.getElementById('idadeHelpText').textContent = idade <= 5 ? '✅ Isento(a) — Grátis!' : idade <= 10 ?
+                '💰 Meia-entrada (50% do valor)' : '💵 Valor inteiro';
+
+            if (isIsento) {
+                const o = document.createElement('option');
+                o.value = 'isento';
+                o.textContent = 'Isento — Grátis';
+                sel.appendChild(o);
+                ht.textContent = 'Bebês e crianças até 5 anos são isentos(as).';
+                document.getElementById('entradaGroup').style.display = 'none';
+                document.getElementById('inputStatus').value = 'pago';
+                document.getElementById('inputStatus').disabled = true;
+                return;
+            }
+            document.getElementById('inputStatus').disabled = false;
+            const vb = isMeia ? cota.valorMeia : cota.valorInteiro;
+
+            if (cotaNum === 2) {
+                const pl = cota.planos[0];
+                const o = document.createElement('option');
+                o.value = pl.id;
+                o.textContent = `Entrada ${isMeia?'R$ 50':'R$ 100'} + 6x ${isMeia?'R$ 25':'R$ 50'}`;
+                sel.appendChild(o);
+                ht.textContent = `Valor total: R$ ${vb},00${isMeia?' (meia)':''}`;
+                document.getElementById('entradaGroup').style.display = 'block';
+                document.getElementById('inputEntrada').value = isMeia ? 'R$ 50,00' : 'R$ 100,00';
+            } else {
+                document.getElementById('entradaGroup').style.display = 'none';
+                cota.planos.forEach(pl => {
+                    const o = document.createElement('option');
+                    o.value = pl.id;
+                    if (cotaNum === 3) {
+                        o.textContent = pl.id === 'avista' ? `À vista (R$ ${vb},00)` :
+                            `${isMeia?'2x de R$ '+Math.round(pl.valorParcela/2)+',00':'2x de R$ '+pl.valorParcela+',00'}`;
+                    } else {
+                        const pv = isMeia ? Math.round(pl.valorParcela / 2) : pl.valorParcela;
+                        o.textContent = `${isMeia?'7x de R$ '+pv+',00':'7x de R$ '+pl.valorParcela+',00'}`;
+                    }
+                    sel.appendChild(o);
+                });
+                ht.textContent = `Valor total: R$ ${vb},00`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('inputIdade').addEventListener('input', atualizarPlanos);
+            document.getElementById('inputMes').addEventListener('change', atualizarPlanos);
+        });
+
+        // =============================================================
+        //  SAVE
+        // =============================================================
+        function savePerson(e) {
+            e.preventDefault();
+            const nome = document.getElementById('inputNome').value.trim();
+            const idade = parseInt(document.getElementById('inputIdade').value);
+            const mes = parseInt(document.getElementById('inputMes').value);
+            const cotaNum = getCotaByMes(mes);
+            const tipo = getTipoPorIdade(idade);
+            const isIsento = (tipo === 'isento'),
+                isMeia = (tipo === 'meia');
+            const planoId = isIsento ? 'isento' : document.getElementById('inputPlano').value;
+            const status = isIsento ? 'pago' : document.getElementById('inputStatus').value;
+            if (!nome || isNaN(idade)) { showToast('Preencha todos os campos.', 'error'); return; }
+
+            const pessoa = {
+                id: gerarId(), nome, idade, mes, cota: cotaNum, meia: isMeia, isento: isIsento, planoId, status,
+                pagouEntrada: false,
+                parcelasPagas: (status === 'pago' && !isIsento) ? gerarTodasParcelas(cotaNum, planoId) : [],
+                createdAt: new Date().toISOString()
+            };
+            pessoas.push(pessoa);
+            salvarDados();
+            renderizar();
+            closeAddModal();
+            const tipoLabel = isIsento ? ' (Isento)' : isMeia ? ' (Meia)' : '';
+            addLog('add', 'Inscrição adicionada', `${nome} — ${COTAS[cotaNum].nome}, R$ ${getValorPorPessoa(pessoa)},00${tipoLabel}`);
+            showToast(`${nome} inscrito(a) com sucesso!`, 'success');
+            return false;
+        }
+
+        function gerarTodasParcelas(cn, pi) { const c = COTAS[cn]; if (!c) return []; const pl = c.planos.find(x => x.id ===
+                pi); if (!pl) return []; const a = []; for (let i = 1; i <= pl.parcelas; i++) a.push(i); return a; }
+
+        // =============================================================
+        //  BULK
+        // =============================================================
+        let bulkDadosParsed = [];
+
+        function openBulkModal() {
+            document.getElementById('bulkModal').classList.add('open');
+            document.getElementById('bulkTextarea').value = '';
+            document.getElementById('bulkPreviewContainer').style.display = 'none';
+            bulkDadosParsed = [];
+        }
+
+        function closeBulkModal() { document.getElementById('bulkModal').classList.remove('open'); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('bulkTextarea').addEventListener('input', atualizarPreviewBulk);
+            document.getElementById('bulkMes').addEventListener('change', atualizarPreviewBulk);
+        });
+
+        function atualizarPreviewBulk() {
+            const raw = document.getElementById('bulkTextarea').value.trim();
+            const mes = parseInt(document.getElementById('bulkMes').value);
+            if (!raw) { document.getElementById('bulkPreviewContainer').style.display = 'none';
+                bulkDadosParsed = []; return; }
+            const lines = raw.split('\n').filter(l => l.trim());
+            const parsed = [];
+            lines.forEach(line => {
+                let parts = line.split(';');
+                if (parts.length < 2) parts = line.split('\t');
+                if (parts.length < 2) parts = line.split(',');
+                if (parts.length < 2) return;
+                const nome = parts[0].trim();
+                const idade = parseInt(parts[1].trim());
+                if (!nome || isNaN(idade)) return;
+                const tipo = getTipoPorIdade(idade);
+                const cn = getCotaByMes(mes);
+                const c = COTAS[cn];
+                const ii = (tipo === 'isento'),
+                    im = (tipo === 'meia');
+                parsed.push({ nome, idade, tipo, isento: ii, meia: im, cota: cn,
+                    planoId: ii ? 'isento' : (c?.planos[0]?.id || ''), valor: ii ? 0 : (im ? c.valorMeia : c
+                        .valorInteiro) });
+            });
+            bulkDadosParsed = parsed;
+            document.getElementById('bulkPreviewCount').textContent = parsed.length;
+            if (parsed.length > 0) {
+                document.getElementById('bulkPreviewContainer').style.display = 'block';
+                document.getElementById('bulkPreview').innerHTML = parsed.map(p =>
+                    `<div class="preview-item"><span><strong>${escHtml(p.nome)}</strong> - ${p.idade} anos</span><span>${p.isento?'<span class="tipo-badge isento">Isento</span>':p.meia?'<span class="tipo-badge meia">Meia</span>':'<span class="tipo-badge inteira">Inteira</span>'} ${p.isento?'':'R$ '+p.valor+',00'}</span></div>`
+                ).join('');
+            } else { document.getElementById('bulkPreviewContainer').style.display = 'none'; }
+        }
+
+        function processarCadastroEmMassa() {
+            if (bulkDadosParsed.length === 0) { showToast('Nenhum dado válido.', 'error'); return; }
+            const status = document.getElementById('bulkStatus').value;
+            const mes = parseInt(document.getElementById('bulkMes').value);
+            let cad = 0,
+                ign = 0;
+            const nomes = [];
+            bulkDadosParsed.forEach(d => {
+                if (pessoas.some(p => p.nome.toLowerCase() === d.nome.toLowerCase() && p.idade === d.idade)) { ign++; return; }
+                pessoas.push({
+                    id: gerarId(), nome: d.nome, idade: d.idade, mes, cota: d.cota, meia: d.meia, isento: d.isento,
+                    planoId: d.planoId, status: d.isento ? 'pago' : status,
+                    pagouEntrada: false,
+                    parcelasPagas: (status === 'pago' && !d.isento) ? gerarTodasParcelas(d.cota, d.planoId) : [],
+                    createdAt: new Date().toISOString(), bulkImport: true
+                });
+                cad++;
+                nomes.push(d.nome);
+            });
+            if (cad > 0) {
+                salvarDados();
+                renderizar();
+                const listaNomes = nomes.length <= 3 ? nomes.join(', ') : `${nomes.slice(0,3).join(', ')} e mais ${nomes.length-3}`;
+                addLog('bulk', 'Inscrição em massa', `${cad} pessoa(s) cadastrada(s): ${listaNomes}${ign>0?' ('+ign+' duplicatas ignoradas)':''}`);
+                closeBulkModal();
+                showToast(`${cad} cadastrado(s)! ${ign>0?'('+ign+' duplicatas)':''}`, 'success');
+            } else { showToast(`Nenhum novo. ${ign>0?'Todos já existem.':'Verifique os dados.'}`, 'warning'); }
+        }
+
+        // =============================================================
+        //  PAYMENT
+        // =============================================================
+        function abrirPagamento(id) {
+            const p = pessoas.find(x => x.id === id);
+            if (!p || p.isento) return;
+            const cota = COTAS[p.cota];
+            if (!cota) return;
+            const vt = getValorPorPessoa(p),
+                vp = getValorTotalPago(p),
+                saldo = vt - vp;
+            const plano = cota.planos.find(pl => pl.id === p.planoId);
+            if (!plano) return;
+            const body = document.getElementById('payModalBody');
+            let parHTML = '';
+            if (plano.parcelas > 1) {
+                let items = '';
+                for (let i = 1; i <= plano.parcelas; i++) {
+                    const ok = p.parcelasPagas?.includes(i);
+                    items += `<div class="installment-item ${ok?'paid':'pending'}" onclick="toggleParcela('${p.id}',${i})" title="${ok?'Desmarcar':'Marcar'}"><span class="inst-num">${i}ª</span><span>${ok?'✓':'○'}</span><span style="font-size:10px;">${formatMoney(plano.valorParcela)}</span></div>`;
+                }
+                parHTML =
+                    `<div style="margin-top:16px;"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;"><i class="fas fa-credit-card"></i> Parcelas (clique)</label><div class="installment-grid">${items}</div></div>`;
+            }
+            const tagTipo = p.meia ?
+                '<span style="background:#E0F2FE;padding:2px 10px;border-radius:50px;font-size:12px;font-weight:600;color:#0369A1;">Meia</span>' :
+                '<span style="background:#F3E8FF;padding:2px 10px;border-radius:50px;font-size:12px;font-weight:600;color:#7C3AED;">Inteira</span>';
+
+            body.innerHTML = `
+                <div style="margin-bottom:16px;">
+                    <h3 style="font-size:20px;font-weight:700;">${escHtml(p.nome)}</h3>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+                        <span class="cota-badge c${p.cota}" style="width:auto;padding:4px 14px;border-radius:50px;font-size:12px;">${cota.nome}</span>
+                        ${tagTipo}
+                        <span class="status-badge ${p.status==='pago'?'pago':p.status==='parcial'?'parcial':'pendente'}">
+                            <i class="fas ${p.status==='pago'?'fa-check-circle':p.status==='parcial'?'fa-hourglass-half':'fa-clock'}"></i>
+                            ${p.status==='pago'?'Pago':p.status==='parcial'?'Parcial':'Pendente'}
+                        </span>
+                    </div>
+                </div>
+                <div class="pay-detail">
+                    <div class="pay-row"><span class="label">Valor total</span><span class="value gold">${formatMoney(vt)}</span></div>
+                    <div class="pay-row"><span class="label">Plano</span><span class="value">${plano.label}</span></div>
+                    ${plano.entrada>0?`<div class="pay-row"><span class="label">Entrada (${formatMoney(plano.entrada)})</span><span class="value ${p.pagouEntrada?'green':'red'}"><span onclick="toggleEntrada('${p.id}')" style="cursor:pointer;">${p.pagouEntrada?'✓ Paga':'○ Pendente'}</span></span></div>`:''}
+                    <div class="pay-row"><span class="label">Valor pago</span><span class="value green">${formatMoney(vp)}</span></div>
+                    <div class="pay-row"><span class="label">Saldo</span><span class="value ${saldo>0?'red':'green'}">${saldo>0?formatMoney(saldo):'✅ Quitado'}</span></div>
+                </div>
+                ${parHTML}
+                <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+                    <button onclick="marcarPago('${p.id}')" style="flex:1;padding:12px;background:var(--success);color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;"><i class="fas fa-check-circle"></i> Marcar Pago</button>
+                    <button onclick="marcarPendente('${p.id}')" style="flex:1;padding:12px;background:var(--warning);color:#92400E;border:none;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;"><i class="fas fa-undo"></i> Resetar</button>
+                </div>
+            `;
+            document.getElementById('payModal').classList.add('open');
+        }
+
+        function closePayModal() { document.getElementById('payModal').classList.remove('open'); }
+
+        function toggleParcela(id, num) {
+            const p = pessoas.find(x => x.id === id);
+            if (!p) return;
+            if (!p.parcelasPagas) p.parcelasPagas = [];
+            const idx = p.parcelasPagas.indexOf(num);
+            if (idx === -1) p.parcelasPagas.push(num);
+            else p.parcelasPagas.splice(idx, 1);
+            p.parcelasPagas.sort((a, b) => a - b);
+            atualizarStatusPorParcelas(p);
+            salvarDados();
+            renderizar();
+            const plano = COTAS[p.cota]?.planos.find(x => x.id === p.planoId);
+            addLog('payment', 'Parcela alterada', `${p.nome} — parcela ${num}ª ${p.parcelasPagas.includes(num)?'paga':'desmarcada'} (${p.parcelasPagas.length}/${plano?.parcelas||'?'})`);
+            abrirPagamento(id);
+        }
+
+        function toggleEntrada(id) {
+            const p = pessoas.find(x => x.id === id);
+            if (!p) return;
+            p.pagouEntrada = !p.pagouEntrada;
+            atualizarStatusPorParcelas(p);
+            salvarDados();
+            renderizar();
+            addLog('payment', 'Entrada alterada', `${p.nome} — entrada ${p.pagouEntrada?'paga':'desmarcada'}`);
+            abrirPagamento(id);
+        }
+
+        function atualizarStatusPorParcelas(p) {
+            if (p.isento) { p.status = 'pago'; return; }
+            const c = COTAS[p.cota];
+            const pl = c?.planos.find(x => x.id === p.planoId);
+            if (!pl) return;
+            let total = p.parcelasPagas?.length || 0;
+            if (pl.entrada > 0 && p.pagouEntrada) total++;
+            if (total >= (pl.entrada > 0 ? pl.parcelas + 1 : pl.parcelas)) p.status = 'pago';
+            else if (total > 0) p.status = 'parcial';
+            else p.status = 'pendente';
+        }
+
+        function marcarPago(id) {
+            const p = pessoas.find(x => x.id === id);
+            if (!p) return;
+            const c = COTAS[p.cota];
+            const pl = c?.planos.find(x => x.id === p.planoId);
+            if (pl) { p.parcelasPagas = []; for (let i = 1; i <= pl.parcelas; i++) p.parcelasPagas.push(i); if (pl.entrada >
+                    0) p.pagouEntrada = true; }
+            p.status = 'pago';
+            salvarDados();
+            renderizar();
+            addLog('payment', 'Pagamento confirmado', `${p.nome} — ${COTAS[p.cota].nome} marcada como PAGA.`);
+            abrirPagamento(id);
+            showToast(`${p.nome} — pago!`, 'success');
+        }
+
+        function marcarPendente(id) {
+            const p = pessoas.find(x => x.id === id);
+            if (!p) return;
+            p.parcelasPagas = [];
+            p.pagouEntrada = false;
+            p.status = 'pendente';
+            salvarDados();
+            renderizar();
+            addLog('payment', 'Pagamento resetado', `${p.nome} — status voltou para pendente.`);
+            abrirPagamento(id);
+            showToast(`${p.nome} — resetado.`, 'warning');
+        }
+
+        // =============================================================
+        //  DELETE
+        // =============================================================
+        function deletarPessoa(id) {
+            const p = pessoas.find(x => x.id === id);
+            if (!p) return;
+            if (!confirm(`Remover "${p.nome}"?`)) return;
+            const nome = p.nome,
+                cota = COTAS[p.cota]?.nome || '';
+            pessoas = pessoas.filter(x => x.id !== id);
+            salvarDados();
+            renderizar();
+            addLog('delete', 'Inscrição removida', `${nome} foi removido(a) da ${cota}.`);
+            showToast(`${nome} removido(a).`, 'warning');
+        }
+
+        // =============================================================
+        //  TOAST
+        // =============================================================
+        function showToast(msg, type = 'success') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = 'toast ' + type;
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle' };
+            t.innerHTML = `<i class="fas ${icons[type]||icons.success}"></i> ${msg}`;
+            c.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0';
+                t.style.transform = 'translateX(40px)';
+                t.style.transition = 'all .3s';
+                setTimeout(() => t.remove(), 300); }, 3500);
+        }
+
+        // =============================================================
+        //  GOOGLE SHEETS
+        // =============================================================
+        function importFromSheet() {
+            const url = localStorage.getItem('rama_webhook_url') || '';
+            if (!url) {
+                const r = prompt(
+                    'Cole a URL do Webhook do Google Apps Script:\nEx: https://script.google.com/macros/s/SEU_ID/exec');
+                if (r && r.trim()) { localStorage.setItem('rama_webhook_url', r.trim());
+                    fetchFromWebhook(r.trim()); } else showToast('URL não fornecida.', 'warning');
+            } else { fetchFromWebhook(url); }
+        }
+
+        async function fetchFromWebhook(url) {
+            showToast('Importando...', 'warning');
+            try {
+                const resp = await fetch(url + '?action=getInscricoes');
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const data = await resp.json();
+                if (data && data.inscricoes && Array.isArray(data.inscricoes)) {
+                    let imp = 0;
+                    data.inscricoes.forEach(item => {
+                        if (pessoas.some(p => p.nome.toLowerCase() === (item.nome || '').toLowerCase() && p
+                            .idade === parseInt(item.idade))) return;
+                        if (!item.nome) return;
+                        const idade = parseInt(item.idade) || 0;
+                        const dt = item.dataInscricao ? new Date(item.dataInscricao) : new Date();
+                        const mes = dt.getMonth() + 1;
+                        const cn = getCotaByMes(mes);
+                        const tipo = getTipoPorIdade(idade);
+                        const ii = (tipo === 'isento'),
+                            im = (tipo === 'meia');
+                        const c = COTAS[cn];
+                        pessoas.push({
+                            id: gerarId(), nome: item.nome.trim(), idade,
+                            mes: (mes >= 6 && mes <= 10) ? mes : 6, cota: cn, meia: im, isento: ii,
+                            planoId: ii ? 'isento' : (c?.planos[0]?.id || c?.planos[0]?.id || ''),
+                            status: ii ? 'pago' : 'pendente', pagouEntrada: false, parcelasPagas: [],
+                            createdAt: new Date().toISOString(), imported: true
+                        });
+                        imp++;
+                    });
+                    salvarDados();
+                    renderizar();
+                    addLog('info', 'Importação Google Sheets', `${imp} inscrito(s) importados do Google Forms.`);
+                    showToast(`${imp} importado(s)!`, 'success');
+                } else { showToast('Formato inesperado.', 'error'); }
+            } catch (err) { showToast('Erro: ' + err.message, 'error');
+                console.error(err); }
+        }
+
+        // =============================================================
+        //  APPS SCRIPT CODE
+        // =============================================================
+        const appsScriptCode = `/** Rama Xerem - Retiro Carnaval */
+const WEBHOOK_URL = 'SEU_WEBHOOK_AQUI';
+function importarDados(e) {
+  var v = e.values, nome = v[2]||'', idade = parseInt(v[3])||0;
+  if(!nome) return;
+  var mes = new Date(v[1]).getMonth()+1;
+  UrlFetchApp.fetch(WEBHOOK_URL, {method:'post',contentType:'application/json',payload:JSON.stringify({nome,idade,mes}),muteHttpExceptions:true});
+}
+function doGet(e) {
+  if((e||{}).parameter&&e.parameter.action=='getInscricoes') return getInscricoes();
+  return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
+}
+function getInscricoes() {
+  var s = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getDataRange().getValues(), r = [];
+  for(var i=1;i<s.length;i++) if(s[i][1]) r.push({nome:s[i][1],idade:s[i][2]||0,mes:s[i][3]||6,dataInscricao:s[i][0]?s[i][0].toString():''});
+  return ContentService.createTextOutput(JSON.stringify({inscricoes:r})).setMimeType(ContentService.MimeType.JSON);
+}`;
+
+        function copyAppsScript() {
+            navigator.clipboard.writeText(appsScriptCode).then(() => showToast('Código copiado!', 'success')).catch(
+            () => { const ta = document.createElement('textarea');
+                ta.value = appsScriptCode;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+                showToast('Código copiado!', 'success'); });
+        }
+
+        // =============================================================
+        //  EXPORT / IMPORT / CLEAR
+        // =============================================================
+        function exportJSON() {
+            const data = JSON.stringify({ pessoas, exportadoEm: new Date().toISOString() }, null, 2);
+            const b = new Blob([data], { type: 'application/json' });
+            const u = URL.createObjectURL(b);
+            const a = document.createElement('a');
+            a.href = u;
+            a.download = 'rama-retiro-dados.json';
+            a.click();
+            URL.revokeObjectURL(u);
+            showToast('Dados exportados!', 'success');
+        }
+
+        function importJSON() { document.getElementById('jsonFileInput').click(); }
+
+        function handleJSONImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const r = new FileReader();
+            r.onload = (e) => {
+                try {
+                    const d = JSON.parse(e.target.result);
+                    if (d.pessoas && Array.isArray(d.pessoas)) {
+                        pessoas = d.pessoas;
+                        pessoas.forEach(p => { if (p.isento === undefined) p.isento = getTipoPorIdade(p.idade) ===
+                                'isento'; if (p.pagouEntrada === undefined) p.pagouEntrada = false; });
+                        salvarDados();
+                        renderizar();
+                        addLog('info', 'Dados importados', `${pessoas.length} inscrito(s) importados de arquivo JSON.`);
+                        showToast(`${pessoas.length} inscrito(s) importados!`, 'success');
+                    } else showToast('Arquivo inválido.', 'error');
+                } catch (err) { showToast('Erro: ' + err.message, 'error'); }
+            };
+            r.readAsText(file);
+            event.target.value = '';
+        }
+
+        function clearAllData() {
+            if (!confirm('TEM CERTEZA? Todos os dados serão perdidos!')) return;
+            if (!confirm('Confirmação final?')) return;
+            pessoas = [];
+            salvarDados();
+            renderizar();
+            addLog('info', 'Dados limpos', 'Todos os inscritos foram removidos do sistema.');
+            showToast('Dados removidos.', 'warning');
+        }
+
+        // =============================================================
+        //  SAMPLE DATA
+        // =============================================================
+        function loadSampleData() {
+            const samples = [
+                { nome: 'Ana Beatriz Oliveira', idade: 28, mes: 6, meia: false, isento: false, planoId: '7x50', status: 'pago',
+                    parcelasPagas: [1, 2, 3, 4, 5, 6, 7], pagouEntrada: false },
+                { nome: 'Carlos Eduardo Santos', idade: 34, mes: 7, meia: false, isento: false,
+                    planoId: 'entrada+6x50', status: 'parcial', parcelasPagas: [1, 2, 3], pagouEntrada: true },
+                { nome: 'Maria Clara Lima', idade: 8, mes: 6, meia: true, isento: false, planoId: '7x50',
+                    status: 'pendente', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'João Pedro Almeida', idade: 15, mes: 10, meia: false, isento: false, planoId: '2x225',
+                    status: 'pago', parcelasPagas: [1, 2], pagouEntrada: false },
+                { nome: 'Sofia Costa Martins', idade: 42, mes: 6, meia: false, isento: false, planoId: '7x50',
+                    status: 'parcial', parcelasPagas: [1, 2, 3, 4], pagouEntrada: false },
+                { nome: 'Lucas Gabriel Pereira', idade: 10, mes: 7, meia: true, isento: false, planoId: 'entrada+6x50',
+                    status: 'pendente', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'Fernanda Rocha Silva', idade: 22, mes: 10, meia: false, isento: false, planoId: 'avista',
+                    status: 'pago', parcelasPagas: [1], pagouEntrada: false },
+                { nome: 'Enzo Miguel Santos', idade: 3, mes: 6, meia: false, isento: true, planoId: 'isento',
+                    status: 'pago', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'Valentina Souza Lima', idade: 5, mes: 7, meia: false, isento: true, planoId: 'isento',
+                    status: 'pago', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'Rafaela Mendes Dias', idade: 19, mes: 7, meia: false, isento: false, planoId: 'entrada+6x50',
+                    status: 'pendente', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'Gabriel Araújo Nunes', idade: 47, mes: 10, meia: false, isento: false, planoId: '2x225',
+                    status: 'parcial', parcelasPagas: [1], pagouEntrada: false },
+                { nome: 'Helena Cardoso Ribeiro', idade: 7, mes: 10, meia: true, isento: false, planoId: '2x225',
+                    status: 'pendente', parcelasPagas: [], pagouEntrada: false }
+            ];
+            samples.forEach(s => { s.id = gerarId();
+                s.createdAt = new Date().toISOString();
+                s.cota = getCotaByMes(s.mes);
+                pessoas.push(s); });
+            salvarDados();
+            renderizar();
+            addLog('info', 'Dados de exemplo', `${samples.length} inscritos de exemplo carregados para teste.`);
+            showToast(`${samples.length} exemplos carregados!`, 'success');
+        }
+    </script>
+</body>
+</html>
