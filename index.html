@@ -698,6 +698,15 @@
 
         function getValorPorPessoa(p) { if (p.isento) return 0; const c = COTAS[p.cota]; return c ? (p.meia ? c.valorMeia : c.valorInteiro) : 0; }
 
+        function getValorParcela(p) {
+            if (!p || p.isento) return 0;
+            const c = COTAS[p.cota];
+            if (!c) return 0;
+            const plano = c.planos.find(pl => pl.id === p.planoId);
+            if (!plano) return 0;
+            return p.meia ? Math.round(plano.valorParcela / 2) : plano.valorParcela;
+        }
+
         function getValorTotalPago(p) {
             if (p.isento || p.status === 'pendente') return 0;
             if (p.status === 'pago') return getValorPorPessoa(p);
@@ -971,6 +980,7 @@
                 sIcn = 'fa-hourglass-half';
                 sLbl = 'Parcial'; }
             const plano = cota.planos.find(pl => pl.id === p.planoId);
+            const valorParcela = getValorParcela(p);
             const parInfo = isIsento ? '-' : (plano ? `${p.parcelasPagas?.length||0}/${plano.parcelas}` : '-');
             const plLabel = isIsento ? '-' : (plano ? plano.label : '-');
             const cotaEx = isIsento ? `<span class="cota-badge isento-tag">Isento</span>` :
@@ -988,8 +998,12 @@
                     <td class="hide-mobile">${parInfo}</td>
                     <td>
                         <div class="actions-cell">
-                            ${isIsento ? `<button class="btn-pay" onclick="showToast('${escHtml(p.nome)} é isento(a).','info')" title="Isento"><i class="fas fa-check-circle"></i></button>`
-                            : `<button class="btn-pay" onclick="abrirPagamento('${p.id}')" title="Pagamento"><i class="fas fa-credit-card"></i></button>`}
+                            <button class="btn-pay" onclick="abrirPagamento('${p.id}')" title="Pagamento">
+                                <i class="fas fa-credit-card"></i>
+                            </button>
+                            <button class="btn-pay" onclick="toggleIsentoRapido('${p.id}')" title="${p.isentoManual ? 'Remover Isento Manual' : 'Marcar como Isento (Ato de Amor)'}">
+                                <i class="fas fa-heart" style="color: ${p.isentoManual ? '#16A34A' : '#DC2626'}"></i>
+                            </button>
                             <button class="btn-delete" onclick="deletarPessoa('${p.id}')" title="Remover"><i class="fas fa-trash-alt"></i></button>
                         </div>
                     </td>
@@ -1282,13 +1296,14 @@
                 saldo = vt - vp;
             const plano = cota.planos.find(pl => pl.id === p.planoId);
             if (!plano) return;
+            const valorParcelaAtual = getValorParcela(p);
             const body = document.getElementById('payModalBody');
             let parHTML = '';
             if (plano.parcelas > 1) {
                 let items = '';
                 for (let i = 1; i <= plano.parcelas; i++) {
                     const ok = p.parcelasPagas?.includes(i);
-                    items += `<div class="installment-item ${ok?'paid':'pending'}" onclick="toggleParcela('${p.id}',${i})" title="${ok?'Desmarcar':'Marcar'}"><span class="inst-num">${i}ª</span><span>${ok?'✓':'○'}</span><span style="font-size:10px;">${formatMoney(plano.valorParcela)}</span></div>`;
+                    items += `<div class="installment-item ${ok?'paid':'pending'}" onclick="toggleParcela('${p.id}',${i})" title="${ok?'Desmarcar':'Marcar'}"><span class="inst-num">${i}ª</span><span>${ok?'✓':'○'}</span><span style="font-size:10px;">${formatMoney(getValorParcela(p))}</span></div>`;
                 }
                 parHTML =
                     `<div style="margin-top:16px;"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;"><i class="fas fa-credit-card"></i> Parcelas (clique)</label><div class="installment-grid">${items}</div></div>`;
@@ -1392,6 +1407,77 @@
             addLog('payment', 'Pagamento resetado', `${p.nome} — status voltou para pendente.`);
             abrirPagamento(id);
             showToast(`${p.nome} — resetado.`, 'warning');
+        }
+
+        function marcarIsentoManual(id) {
+            const p = pessoas.find(x => x.id === id);
+            if (!p) return;
+
+            if (p.isentoManual) {
+                if (!confirm(`Remover o isento manual de "${p.nome}"?`)) return;
+                
+                p.isento = false;
+                p.isentoManual = false;
+                p.status = 'pendente';
+                p.planoId = COTAS[p.cota]?.planos[0]?.id || '7x50';
+                p.parcelasPagas = [];
+                p.pagouEntrada = false;
+                
+                salvarDados();
+                renderizar();
+                addLog('payment', 'Isento manual removido', `${p.nome} — isento manual foi desfeito.`);
+                closePayModal();
+                showToast(`${p.nome} voltou para status normal.`, 'warning');
+                return;
+            }
+
+            if (!confirm(`Marcar "${p.nome}" como ISENTO MANUAL (Ato de Amor)?`)) return;
+            
+            p.isento = true;
+            p.isentoManual = true;
+            p.status = 'pago';
+            p.planoId = 'isento';
+            p.parcelasPagas = [];
+            p.pagouEntrada = false;
+            
+            salvarDados();
+            renderizar();
+            addLog('payment', 'Isento manual (Ato de Amor)', `${p.nome} — marcado como isento por decisão da equipe.`);
+            closePayModal();
+            showToast(`${p.nome} agora é isento(a)! ❤️`, 'success');
+        }
+
+        function toggleIsentoRapido(id) {
+            const p = pessoas.find(x => x.id === id);
+            if (!p) return;
+
+            if (p.isentoManual) {
+                // Desfazer isento
+                p.isento = false;
+                p.isentoManual = false;
+                p.status = 'pendente';
+                p.planoId = COTAS[p.cota]?.planos[0]?.id || '7x50';
+                p.parcelasPagas = [];
+                p.pagouEntrada = false;
+
+                salvarDados();
+                renderizar();
+                addLog('payment', 'Isento manual removido', `${p.nome} — isento manual foi desfeito.`);
+                showToast(`${p.nome} voltou ao normal.`, 'warning');
+            } else {
+                // Marcar como isento
+                p.isento = true;
+                p.isentoManual = true;
+                p.status = 'pago';
+                p.planoId = 'isento';
+                p.parcelasPagas = [];
+                p.pagouEntrada = false;
+
+                salvarDados();
+                renderizar();
+                addLog('payment', 'Isento manual (Ato de Amor)', `${p.nome} — marcado como isento por decisão da equipe.`);
+                showToast(`${p.nome} agora é isento(a)! ❤️`, 'success');
+            }
         }
 
         // =============================================================
@@ -1637,5 +1723,5 @@ function getInscricoes() {
         }
     </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0ff5a6d3b5ee29d',t:'MTc4MjE3NDMwMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0ffd5fb993bdf4f',t:'MTc4MjE3OTM2Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
