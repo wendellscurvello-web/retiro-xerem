@@ -12,8 +12,7 @@
 
     <style>
         *,
-        *::before,
-        *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
             --primary: #8B0000; --primary-light: #B22222; --primary-dark: #5C0000;
             --gold: #D4A843; --gold-light: #F0D080; --bg: #FAF7F2; --card: #FFFFFF;
@@ -29,21 +28,92 @@
         body { font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
         a { color: var(--primary); text-decoration: none; }
 
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            padding: 20px;
+        }
+        .login-card {
+            background: #fff; border-radius: var(--radius); padding: 40px 36px;
+            box-shadow: var(--shadow-lg); width: 100%; max-width: 420px;
+            animation: loginIn .4s ease-out;
+        }
+        @keyframes loginIn { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .login-brand { text-align: center; margin-bottom: 28px; }
+        .login-brand .login-icon {
+            width: 64px; height: 64px; margin: 0 auto 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 28px; box-shadow: 0 8px 24px rgba(139,0,0,0.3);
+        }
+        .login-brand h1 { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--text); }
+        .login-brand p { font-size: 13px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+        .login-card label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+        .login-card label .required { color: var(--danger); }
+        .login-card input {
+            width: 100%; padding: 12px 14px; border: 1px solid var(--border);
+            border-radius: 10px; font-family: var(--font-sans); font-size: 14px;
+            background: var(--bg); transition: border .2s; outline: none; color: var(--text);
+            margin-bottom: 16px;
+        }
+        .login-card input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139,0,0,0.1); }
+        .btn-login {
+            width: 100%; padding: 14px; background: var(--primary); color: #fff;
+            border: none; border-radius: 12px; font-size: 15px; font-weight: 600;
+            font-family: var(--font-sans); cursor: pointer; transition: background .2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            margin-top: 4px;
+        }
+        .btn-login:hover:not(:disabled) { background: var(--primary-dark); }
+        .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
+        .login-error {
+            background: #FEE2E2; color: #991B1B; padding: 10px 14px;
+            border-radius: 10px; font-size: 13px; margin-top: 14px; display: none;
+        }
+        .login-error.show { display: block; }
+        .login-footer {
+            text-align: center; margin-top: 22px; padding-top: 18px;
+            border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .login-footer i { color: var(--gold); }
+
+        /* ===== STATUS INDICATOR ===== */
+        .conn-status {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12px; padding: 4px 10px; border-radius: 50px;
+            background: rgba(255,255,255,0.15); color: #fff; font-weight: 500;
+        }
+        .conn-status .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #4ADE80; box-shadow: 0 0 8px #4ADE80;
+        }
+        .conn-status.offline .dot { background: #FCA5A5; box-shadow: 0 0 8px #FCA5A5; }
+        .conn-status.saving .dot { background: #FCD34D; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
         /* HEADER */
         .header { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%); color: #fff; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(139,0,0,0.3); }
-        .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 12px; }
         .header-brand { display: flex; align-items: center; gap: 14px; }
         .header-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; backdrop-filter: blur(4px); }
         .header-title h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; }
         .header-title span { font-size: 12px; opacity: 0.8; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; }
-        .header-actions { display: flex; align-items: center; gap: 12px; }
-        .header-user { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 6px 14px 6px 10px; border-radius: 50px; font-size: 13px; cursor: pointer; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.15); }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .header-date { font-size: 13px; opacity: 0.85; display: none; }
+        .header-user { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 6px 12px 6px 8px; border-radius: 50px; font-size: 13px; cursor: pointer; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.15); }
         .header-user:hover { background: rgba(255,255,255,0.2); }
         .header-user .avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: var(--primary-dark); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
-        .header-user .username { font-weight: 500; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .header-date { font-size: 13px; opacity: 0.85; display: none; }
-        .user-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 50px; font-size: 10px; font-weight: 600; background: rgba(255,255,255,0.15); color: #fff; }
+        .header-user .username { font-weight: 500; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .header-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; transition: background 0.2s; }
+        .header-btn:hover { background: rgba(255,255,255,0.25); }
         @media (min-width: 640px) { .header-date { display: block; } }
+        @media (max-width: 768px) {
+            .header-user .username { max-width: 80px; }
+            .header-date { display: none !important; }
+        }
 
         /* HERO */
         .hero { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; padding: 48px 24px 56px; text-align: center; position: relative; overflow: hidden; }
@@ -98,7 +168,6 @@
         .toolbar-btn.btn-primary:hover { background: var(--primary-dark); }
         .toolbar-btn.btn-outline { background: #fff; color: #333; border: 1px solid var(--border); }
         .toolbar-btn.btn-outline:hover { background: #f8f8f8; border-color: #ccc; }
-        .toolbar-btn.btn-outline i.fa-google { color: #4285F4; }
         .toolbar-btn.btn-bulk { background: #7C3AED; color: #fff; }
         .toolbar-btn.btn-bulk:hover { background: #6D28D9; }
         .toolbar-btn.btn-log { background: #0891B2; color: #fff; }
@@ -111,6 +180,8 @@
         td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: rgba(139,0,0,0.02); }
+        tr.row-changed { animation: rowFlash 1.5s ease-out; }
+        @keyframes rowFlash { 0% { background: rgba(212,168,67,0.3); } 100% { background: transparent; } }
         .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; }
         .status-badge.pago { background: #DCFCE7; color: #15803D; }
         .status-badge.pendente { background: #FEF3C7; color: #92400E; }
@@ -198,30 +269,12 @@
         .log-empty { text-align: center; padding: 60px 20px; color: var(--text-muted); }
         .log-empty i { font-size: 48px; opacity: .2; margin-bottom: 12px; }
 
-        /* GOOGLE SETUP */
-        .google-setup { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 32px; }
-        .google-setup h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-        .google-setup h3 i { color: #4285F4; }
-        .google-setup p { color: var(--text-muted); margin-bottom: 16px; font-size: 14px; }
-        .hosting-card { background: var(--bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 16px; }
-        .hosting-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .hosting-card h4 .free-tag { background: var(--success); color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 4px; }
-        .hosting-card ol, .hosting-card ul { margin-left: 20px; font-size: 14px; color: var(--text); line-height: 1.8; }
-        .hosting-card li { margin-bottom: 4px; }
-        .code-block { background: #1E1E2E; color: #CDD6F4; border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono','Fira Code',monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; white-space: pre-wrap; word-break: break-word; margin-bottom: 16px; position: relative; }
-        .code-block .copy-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: var(--font-sans); }
-        .code-block .copy-btn:hover { background: rgba(255,255,255,0.2); }
-        .step-list { list-style: none; counter-reset: step; }
-        .step-list li { counter-increment: step; padding: 14px 0 14px 44px; position: relative; border-bottom: 1px solid var(--border); font-size: 14px; }
-        .step-list li::before { content: counter(step); position: absolute; left: 0; top: 12px; width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
-        .step-list li:last-child { border-bottom: none; }
-        .step-list li strong { color: var(--primary); }
-
         /* TOAST */
         .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
         .toast { background: var(--card); border-radius: 12px; padding: 14px 20px; box-shadow: var(--shadow-lg); border-left: 4px solid var(--success); font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px; animation: toastIn .3s ease-out; max-width: 400px; }
         .toast.error { border-left-color: var(--danger); }
         .toast.warning { border-left-color: var(--warning); }
+        .toast.info { border-left-color: var(--info); }
         @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
         .bulk-preview { background: var(--bg); border-radius: 10px; padding: 12px 16px; margin: 12px 0; max-height: 200px; overflow-y: auto; font-size: 13px; border: 1px solid var(--border); }
         .bulk-preview .preview-item { padding: 4px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
@@ -272,403 +325,311 @@
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-inner">
-            <div class="header-brand">
-                <div class="header-icon"><i class="fas fa-cross"></i></div>
-                <div class="header-title">
-                    <h1>Ramá Xerém</h1>
-                    <span>Retiro de Carnaval</span>
-                </div>
+    <!-- ============================================
+         LOGIN SCREEN (mostrada quando NÃO autenticado)
+         ============================================ -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="login-brand">
+                <div class="login-icon"><i class="fas fa-cross"></i></div>
+                <h1>Ramá Xerém</h1>
+                <p>Retiro de Carnaval</p>
             </div>
-            <div class="header-actions">
-                <span class="header-date"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
-                <div class="header-user" onclick="openUserModal()" title="Clique para identificar-se">
-                    <div class="avatar" id="userAvatar">?</div>
-                    <span class="username" id="userNameDisplay">Identificar</span>
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label>E-mail <span class="required">*</span></label>
+                    <input type="email" id="loginEmail" required placeholder="seu@email.com" autocomplete="email" />
                 </div>
-                <button onclick="window.print()" title="Imprimir" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;">
-                    <i class="fas fa-print"></i>
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label>Senha <span class="required">*</span></label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" autocomplete="current-password" />
+                </div>
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
                 </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-badge"><i class="fas fa-ticket-alt"></i> Controle de Pagamentos</div>
-            <h2>Retiro de <span class="gold">Carnaval</span></h2>
-            <p id="heroUserText">Acompanhe todas as inscrições, cotas e pagamentos. Tudo registrado com transparência.</p>
-        </div>
-    </section>
-
-    <!-- STATS -->
-    <div class="stats-row" id="statsRow">
-        <div class="stat-card"><div class="number" id="statTotal">0</div><div class="label">Inscritos</div></div>
-        <div class="stat-card stat-success"><div class="number" id="statPago">0</div><div class="label">Pagos</div></div>
-        <div class="stat-card stat-warning"><div class="number" id="statPendente">0</div><div class="label">Pendentes</div></div>
-        <div class="stat-card stat-info"><div class="number" id="statIsentos">0</div><div class="label">Isentos</div></div>
-        <div class="stat-card stat-gold"><div class="number" id="statArrecadado">R$ 0</div><div class="label">Arrecadado</div></div>
-    </div>
-
-    <!-- MAIN -->
-    <main class="container">
-
-        <!-- TABS -->
-        <div class="tabs" id="tabsContainer">
-            <button class="tab-btn active" data-view="inscritos"><i class="fas fa-users"></i> Inscritos <span class="badge-tab" id="badgeTodas">0</span></button>
-            <button class="tab-btn" data-view="log"><i class="fas fa-history"></i> Atividades <span class="badge-tab" id="badgeLog">0</span></button>
-            <button class="tab-btn" data-view="config"><i class="fas fa-cog"></i> Config</button>
-        </div>
-
-        <!-- ===== VIEW: INSCRITOS ===== -->
-        <div id="viewInscritos">
-            <div class="filter-row">
-                <div class="filter-group">
-                    <label><i class="fas fa-filter"></i> Status:</label>
-                    <select id="filtroStatus">
-                        <option value="todos">Todos</option>
-                        <option value="pago">Pago</option>
-                        <option value="pendente">Pendente</option>
-                        <option value="parcial">Parcial</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label><i class="fas fa-child"></i> Tipo:</label>
-                    <select id="filtroTipo">
-                        <option value="todos">Todos</option>
-                        <option value="inteira">Inteira</option>
-                        <option value="meia">Meia</option>
-                        <option value="isento">Isento</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label><i class="fas fa-credit-card"></i> Parcelas:</label>
-                    <select id="filtroParcelas">
-                        <option value="todas">Todas</option>
-                        <option value="0">0 pagas</option>
-                        <option value="1">1 paga</option>
-                        <option value="2">2 pagas</option>
-                        <option value="3">3 pagas</option>
-                        <option value="4">4 pagas</option>
-                        <option value="5">5 pagas</option>
-                        <option value="6">6 pagas</option>
-                        <option value="7">7 pagas</option>
-                        <option value="completo">Todas pagas</option>
-                    </select>
-                </div>
-                <button class="filter-btn-clear" onclick="limparFiltros()"><i class="fas fa-times"></i> Limpar</button>
-                <span class="filter-count"><strong id="resultCount">0</strong> resultado(s)</span>
-            </div>
-
-            <div class="table-container">
-                <div class="table-toolbar">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Buscar por nome..." />
-                    </div>
-                    <button class="toolbar-btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> Novo</button>
-                    <button class="toolbar-btn btn-bulk" onclick="openBulkModal()"><i class="fas fa-paste"></i> Massa</button>
-                    <button class="toolbar-btn btn-outline" onclick="importFromSheet()"><i class="fab fa-google"></i> Importar</button>
-                    <button class="toolbar-btn btn-log" onclick="switchToLog()"><i class="fas fa-history"></i> Log</button>
-                </div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Idade</th>
-                                <th>Tipo</th>
-                                <th>Cota</th>
-                                <th class="hide-mobile">Plano</th>
-                                <th>Valor</th>
-                                <th>Status</th>
-                                <th class="hide-mobile">Parcelas</th>
-                                <th style="width:80px;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
-                <div id="emptyState" class="empty-state" style="display:none;">
-                    <i class="fas fa-inbox"></i>
-                    <h3>Nenhum inscrito encontrado</h3>
-                    <p>Adicione manualmente, importe do Google Forms ou cadastre em massa.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== VIEW: LOG ===== -->
-        <div id="viewLog" style="display:none;">
-            <div class="log-container">
-                <div class="log-header">
-                    <h3><i class="fas fa-history"></i> Registro de Atividades</h3>
-                    <div class="log-actions">
-                        <button class="toolbar-btn btn-outline" onclick="exportLog()" style="padding:8px 14px;font-size:12px;">
-                            <i class="fas fa-download"></i> Exportar
-                        </button>
-                        <button class="toolbar-btn btn-outline" onclick="clearLog()" style="padding:8px 14px;font-size:12px;">
-                            <i class="fas fa-trash-alt"></i> Limpar
-                        </button>
-                    </div>
-                </div>
-                <div id="logList"></div>
-                <div id="logEmpty" class="log-empty" style="display:none;">
-                    <i class="fas fa-history"></i>
-                    <h3>Nenhuma atividade registrada</h3>
-                    <p>As ações de cadastro, pagamento e remoção aparecerão aqui.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== VIEW: CONFIG ===== -->
-        <div id="viewConfig" style="display:none;">
-            <div class="google-setup">
-
-                <!-- SEÇÃO: HOSPEDAGEM GRATUITA -->
-                <h3 style="margin-bottom:16px;"><i class="fas fa-globe"></i> Como publicar de graça</h3>
-                <p>Para que toda a equipe da gestão acesse o mesmo site e os dados fiquem sincronizados, siga um dos planos abaixo. Ambos são <strong>100% gratuitos</strong>.</p>
-
-                <div class="hosting-card">
-                    <h4><i class="fab fa-github" style="color:#333;"></i> Plano 1: GitHub Pages + Google Sheets <span class="free-tag">GRÁTIS</span></h4>
-                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Ideal para equipes. O site fica online e os dados são salvos numa planilha do Google que todos podem acessar.</p>
-                    <ol>
-                        <li><strong>Crie uma conta no <a href="https://github.com" target="_blank">GitHub.com</a></strong> (é grátis)</li>
-                        <li>Crie um <strong>novo repositório</strong> com o nome <code>rama-xerem-retiro</code></li>
-                        <li>Faça o upload do arquivo <code>index.html</code> para o repositório</li>
-                        <li>Vá em <strong>Settings → Pages</strong> e ative o GitHub Pages (branch: main, pasta: /root)</li>
-                        <li>Pronto! Seu site estará em <code>https://SEUUSUARIO.github.io/rama-xerem-retiro</code></li>
-                        <li>Compartilhe esse link com a equipe! 🎉</li>
-                    </ol>
-                    <p style="margin-top:10px;font-size:13px;font-weight:500;background:#EFF6FF;padding:10px;border-radius:8px;">
-                        <i class="fas fa-info-circle" style="color:#2563EB;"></i>
-                        <strong>Dica:</strong> Cada pessoa da equipe deve clicar no nome no canto superior direito e <strong>se identificar</strong> — assim todas as ações ficarão registradas com o nome de cada um!
-                    </p>
-                </div>
-
-                <div class="hosting-card">
-                    <h4><i class="fas fa-sync-alt" style="color:#4285F4;"></i> Sincronizando dados com Google Sheets <span class="free-tag">GRÁTIS</span></h4>
-                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Compartilhe uma planilha do Google entre a equipe. Todos veem os mesmos dados em tempo real.</p>
-                    <ol>
-                        <li><strong>Compartilhe a planilha</strong> de respostas do Google Forms com a equipe</li>
-                        <li>Cada pessoa acessa o <strong>mesmo link do site</strong> publicado no GitHub Pages</li>
-                        <li>Vá na aba <strong>"Importar"</strong> e cole a URL do Google Apps Script</li>
-                        <li>Clique em <strong>Importar</strong> para sincronizar os dados</li>
-                    </ol>
-                    <p style="margin-top:10px;font-size:13px;color:var(--text-muted);">
-                        <i class="fas fa-lightbulb" style="color:var(--gold);"></i> 
-                        Cada pessoa importa os dados ao acessar. Os pagamentos são gerenciados manualmente (cada um marca no seu navegador). Para sincronização completa, veja o Plano 2.
-                    </p>
-                </div>
-
-                <div class="hosting-card">
-                    <h4><i class="fas fa-database" style="color:#FF6B35;"></i> Plano 2: Firebase (para sincronia em tempo real) <span class="free-tag">GRÁTIS</span></h4>
-                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Usa o banco de dados gratuito do Google (Firebase). Todos veem e alteram os mesmos dados <strong>em tempo real</strong>.</p>
-                    <ol>
-                        <li>Crie uma conta no <a href="https://firebase.google.com" target="_blank">Firebase</a> (grátis, plano Spark)</li>
-                        <li>Crie um projeto e ative <strong>Firestore Database</strong> (modo teste)</li>
-                        <li>Ative <strong>Firebase Hosting</strong> e faça o deploy do <code>index.html</code></li>
-                        <li>O Firebase salva os dados no banco e todos os usuários compartilham os mesmos dados</li>
-                    </ol>
-                    <p style="margin-top:10px;font-size:13px;color:#92400E;background:#FEF3C7;padding:10px;border-radius:8px;">
-                        <i class="fas fa-tools"></i> 
-                        Este plano exige configurar o Firebase (adicionar SDK). Posso ajudar se quiser!
-                    </p>
-                </div>
-
-                <div style="margin-top:24px;padding:20px;background:#F0FDF4;border-radius:12px;border:1px solid #BBF7D0;">
-                    <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
-                        <i class="fas fa-check-circle" style="color:var(--success);"></i> Resumo — O que fazer agora?
-                    </h4>
-                    <ol style="font-size:14px;line-height:2;">
-                        <li>📁 <strong>Baixe o arquivo</strong> <code>index.html</code> deste site</li>
-                        <li>🐙 <strong>Crie uma conta no GitHub</strong> (se não tiver)</li>
-                        <li>📤 <strong>Faça upload</strong> do <code>index.html</code> no GitHub</li>
-                        <li>🌐 <strong>Ative o GitHub Pages</strong> nas configurações do repositório</li>
-                        <li>📨 <strong>Compartilhe o link</strong> com a equipe de gestão</li>
-                        <li>👤 <strong>Cada um se identifica</strong> clicando no nome no topo</li>
-                        <li>📋 <strong>Todas as ações ficam registradas</strong> no Log de Atividades!</li>
-                    </ol>
-                </div>
-
-                <hr style="border:none;border-top:1px solid var(--border);margin:32px 0;" />
-
-                <h3><i class="fab fa-google"></i> Integração com Google Forms / Sheets</h3>
-                <p>Importe automaticamente os inscritos do seu formulário Google. As inscrições de <strong>Junho</strong> vão para a <strong>1ª Cota</strong>, <strong>Julho</strong> para a <strong>2ª Cota</strong>, <strong>Outubro</strong> para a <strong>3ª Cota</strong>.</p>
-
-                <h4 style="margin-bottom:12px;font-size:15px;font-weight:600;"><i class="fas fa-code"></i> Código Google Apps Script</h4>
-                <p style="font-size:13px;margin-bottom:10px;">Copie e cole no editor do Google Apps Script vinculado à sua planilha.</p>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyAppsScript()"><i class="fas fa-copy"></i> Copiar</button>
-                    <code id="appsScriptCode"></code>
-                </div>
-
-                <h4 style="margin:24px 0 12px;font-size:15px;font-weight:600;"><i class="fas fa-list-ol"></i> Passo a Passo</h4>
-                <ol class="step-list">
-                    <li>Crie um <strong>Google Forms</strong> com: <em>Nome</em>, <em>Idade</em>, <em>Data de Inscrição</em></li>
-                    <li>Na planilha de respostas, vá em <strong>Extensões → Apps Script</strong></li>
-                    <li>Cole o código ao lado e salve (Ctrl+S)</li>
-                    <li>Configure o <strong>gatilho</strong>: "Ao enviar formulário" → função "importarDados"</li>
-                    <li>Autorize o script na primeira execução</li>
-                </ol>
-
-                <div style="margin-top:24px;padding:20px;background:#EFF6FF;border-radius:12px;border:1px solid #BFDBFE;">
-                    <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
-                        <i class="fas fa-database" style="color:#2563EB;"></i> Gerenciar Dados
-                    </h4>
-                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
-                        Os dados ficam salvos no navegador de cada um. Para compartilhar, use o GitHub Pages + Google Sheets.
-                    </p>
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                        <button onclick="exportJSON()" style="padding:10px 18px;background:#2563EB;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;"><i class="fas fa-download"></i> Exportar JSON</button>
-                        <button onclick="importJSON()" style="padding:10px 18px;background:#fff;color:#2563EB;border:1px solid #2563EB;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;"><i class="fas fa-upload"></i> Importar JSON</button>
-                        <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="handleJSONImport(event)" />
-                        <button onclick="clearAllData()" style="padding:10px 18px;background:#fff;color:var(--danger);border:1px solid var(--danger);border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;"><i class="fas fa-trash-alt"></i> Limpar Tudo</button>
-                    </div>
-                </div>
-
-                <div style="margin-top:20px;padding:16px;background:#F3E8FF;border-radius:12px;border:1px solid #E9D5FF;">
-                    <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;"><i class="fas fa-flask"></i> Carregar Exemplos</h4>
-                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Adicione dados de exemplo para testar o sistema.</p>
-                    <button onclick="loadSampleData()" style="padding:10px 18px;background:#7C3AED;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;"><i class="fas fa-play"></i> Carregar Exemplos</button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- MODAL IDENTIFICAR USUÁRIO -->
-    <div class="modal-overlay" id="userModal">
-        <div class="modal" style="max-width:400px;">
-            <div class="modal-header">
-                <h2><i class="fas fa-user-circle"></i> Identifique-se</h2>
-                <button class="close-btn" onclick="closeUserModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">
-                Informe seu nome para que todas as suas ações fiquem registradas no histórico de atividades. Isso traz <strong>transparência</strong> para a gestão.
-            </p>
-            <form onsubmit="return salvarIdentificacao(event)">
-                <div class="form-group">
-                    <label>Seu nome <span class="required">*</span></label>
-                    <input type="text" id="inputUserName" required placeholder="Ex: Pr. João" maxlength="30" />
-                    <div class="help-text">Este nome aparecerá no registro de atividades.</div>
-                </div>
-                <button type="submit" class="btn-submit"><i class="fas fa-check"></i> Confirmar</button>
+                <div id="loginError" class="login-error"></div>
             </form>
+            <div class="login-footer">
+                <i class="fas fa-shield-alt"></i> Acesso restrito à equipe autorizada
+            </div>
         </div>
     </div>
 
-    <!-- MODAL ADICIONAR -->
-    <div class="modal-overlay" id="addModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2><i class="fas fa-user-plus"></i> Novo Inscrito</h2>
-                <button class="close-btn" onclick="closeAddModal()"><i class="fas fa-times"></i></button>
+    <!-- ============================================
+         APP PRINCIPAL (mostrada quando autenticado)
+         ============================================ -->
+    <div id="mainApp" style="display:none;">
+
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-inner">
+                <div class="header-brand">
+                    <div class="header-icon"><i class="fas fa-cross"></i></div>
+                    <div class="header-title">
+                        <h1>Ramá Xerém</h1>
+                        <span>Retiro de Carnaval</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="conn-status" id="connStatus" title="Status da conexão">
+                        <span class="dot"></span> <span id="connStatusText">Online</span>
+                    </span>
+                    <span class="header-date"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
+                    <div class="header-user" onclick="abrirMenuUsuario()" title="Clique para ver opções">
+                        <div class="avatar" id="userAvatar">?</div>
+                        <span class="username" id="userNameDisplay">Carregando...</span>
+                    </div>
+                    <button onclick="window.print()" class="header-btn" title="Imprimir">
+                        <i class="fas fa-print"></i>
+                    </button>
+                    <button onclick="handleLogout()" class="header-btn" title="Sair">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
             </div>
-            <form id="addForm" onsubmit="return savePerson(event)">
+        </header>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge"><i class="fas fa-ticket-alt"></i> Controle de Pagamentos</div>
+                <h2>Retiro de <span class="gold">Carnaval</span></h2>
+                <p id="heroUserText">Acompanhe todas as inscrições, cotas e pagamentos. Tudo registrado com transparência.</p>
+            </div>
+        </section>
+
+        <!-- STATS -->
+        <div class="stats-row" id="statsRow">
+            <div class="stat-card"><div class="number" id="statTotal">0</div><div class="label">Inscritos</div></div>
+            <div class="stat-card stat-success"><div class="number" id="statPago">0</div><div class="label">Pagos</div></div>
+            <div class="stat-card stat-warning"><div class="number" id="statPendente">0</div><div class="label">Pendentes</div></div>
+            <div class="stat-card stat-info"><div class="number" id="statIsentos">0</div><div class="label">Isentos</div></div>
+            <div class="stat-card stat-gold"><div class="number" id="statArrecadado">R$ 0</div><div class="label">Arrecadado</div></div>
+        </div>
+
+        <!-- MAIN -->
+        <main class="container">
+
+            <!-- TABS -->
+            <div class="tabs" id="tabsContainer">
+                <button class="tab-btn active" data-view="inscritos"><i class="fas fa-users"></i> Inscritos <span class="badge-tab" id="badgeTodas">0</span></button>
+                <button class="tab-btn" data-view="log"><i class="fas fa-history"></i> Atividades <span class="badge-tab" id="badgeLog">0</span></button>
+            </div>
+
+            <!-- ===== VIEW: INSCRITOS ===== -->
+            <div id="viewInscritos">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label><i class="fas fa-filter"></i> Status:</label>
+                        <select id="filtroStatus">
+                            <option value="todos">Todos</option>
+                            <option value="pago">Pago</option>
+                            <option value="pendente">Pendente</option>
+                            <option value="parcial">Parcial</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-child"></i> Tipo:</label>
+                        <select id="filtroTipo">
+                            <option value="todos">Todos</option>
+                            <option value="inteira">Inteira</option>
+                            <option value="meia">Meia</option>
+                            <option value="isento">Isento</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-credit-card"></i> Parcelas:</label>
+                        <select id="filtroParcelas">
+                            <option value="todas">Todas</option>
+                            <option value="0">0 pagas</option>
+                            <option value="1">1 paga</option>
+                            <option value="2">2 pagas</option>
+                            <option value="3">3 pagas</option>
+                            <option value="4">4 pagas</option>
+                            <option value="5">5 pagas</option>
+                            <option value="6">6 pagas</option>
+                            <option value="7">7 pagas</option>
+                            <option value="completo">Todas pagas</option>
+                        </select>
+                    </div>
+                    <button class="filter-btn-clear" onclick="limparFiltros()"><i class="fas fa-times"></i> Limpar</button>
+                    <span class="filter-count"><strong id="resultCount">0</strong> resultado(s)</span>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-toolbar">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Buscar por nome..." />
+                        </div>
+                        <button class="toolbar-btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> Novo</button>
+                        <button class="toolbar-btn btn-bulk" onclick="openBulkModal()"><i class="fas fa-paste"></i> Massa</button>
+                        <button class="toolbar-btn btn-log" onclick="switchToLog()"><i class="fas fa-history"></i> Log</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Idade</th>
+                                    <th>Tipo</th>
+                                    <th>Cota</th>
+                                    <th class="hide-mobile">Plano</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                    <th class="hide-mobile">Parcelas</th>
+                                    <th style="width:80px;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="emptyState" class="empty-state" style="display:none;">
+                        <i class="fas fa-inbox"></i>
+                        <h3>Nenhum inscrito encontrado</h3>
+                        <p>Adicione manualmente ou cadastre em massa.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== VIEW: LOG ===== -->
+            <div id="viewLog" style="display:none;">
+                <div class="log-container">
+                    <div class="log-header">
+                        <h3><i class="fas fa-history"></i> Registro de Atividades</h3>
+                        <div class="log-actions">
+                            <button class="toolbar-btn btn-outline" onclick="exportLog()" style="padding:8px 14px;font-size:12px;">
+                                <i class="fas fa-download"></i> Exportar
+                            </button>
+                            <button class="toolbar-btn btn-outline" onclick="clearLog()" style="padding:8px 14px;font-size:12px;">
+                                <i class="fas fa-trash-alt"></i> Limpar
+                            </button>
+                        </div>
+                    </div>
+                    <div id="logList"></div>
+                    <div id="logEmpty" class="log-empty" style="display:none;">
+                        <i class="fas fa-history"></i>
+                        <h3>Nenhuma atividade registrada</h3>
+                        <p>As ações de cadastro, pagamento e remoção aparecerão aqui.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- MODAL ADICIONAR -->
+        <div class="modal-overlay" id="addModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-user-plus"></i> Novo Inscrito</h2>
+                    <button class="close-btn" onclick="closeAddModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <form id="addForm" onsubmit="return savePerson(event)">
+                    <div class="form-group">
+                        <label>Nome completo <span class="required">*</span></label>
+                        <input type="text" id="inputNome" required placeholder="Ex: Maria da Silva" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Idade <span class="required">*</span></label>
+                            <input type="number" id="inputIdade" required min="0" max="120" placeholder="Ex: 25" />
+                            <div class="help-text" id="idadeHelpText">0-5 Isento | 6-10 Meia | 11+ Inteira</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Mês da inscrição <span class="required">*</span></label>
+                            <select id="inputMes">
+                                <option value="6">Junho — 1ª Cota (R$ 350)</option>
+                                <option value="7">Julho — 2ª Cota (R$ 400)</option>
+                                <option value="10">Outubro — 3ª Cota (R$ 450)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Plano de pagamento <span class="required">*</span></label>
+                        <select id="inputPlano"></select>
+                        <div class="help-text" id="planoHelpText"></div>
+                    </div>
+                    <div class="form-group" id="entradaGroup" style="display:none;">
+                        <label>Entrada</label>
+                        <input type="text" id="inputEntrada" readonly style="background:#eee;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Status do pagamento</label>
+                        <select id="inputStatus">
+                            <option value="pendente">Pendente</option>
+                            <option value="parcial">Parcialmente Pago</option>
+                            <option value="pago">Pago</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Salvar Inscrito</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODAL INSCRIÇÃO EM MASSA -->
+        <div class="modal-overlay" id="bulkModal">
+            <div class="modal wide">
+                <div class="modal-header">
+                    <h2><i class="fas fa-users"></i> Inscrição em Massa</h2>
+                    <button class="close-btn" onclick="closeBulkModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">
+                    Cole os dados da planilha. <strong>Formato:</strong> uma pessoa por linha, <strong>Nome; Idade</strong>.
+                </p>
                 <div class="form-group">
-                    <label>Nome completo <span class="required">*</span></label>
-                    <input type="text" id="inputNome" required placeholder="Ex: Maria da Silva" />
+                    <label>Cole os dados aqui <span class="required">*</span></label>
+                    <textarea id="bulkTextarea" placeholder="Maria da Silva; 25&#10;João Pedro; 30&#10;Ana Clara; 4&#10;Lucas; 8"></textarea>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Idade <span class="required">*</span></label>
-                        <input type="number" id="inputIdade" required min="0" max="120" placeholder="Ex: 25" />
-                        <div class="help-text" id="idadeHelpText">0-5 Isento | 6-10 Meia | 11+ Inteira</div>
+                        <label>Mês da inscrição <span class="required">*</span></label>
+                        <select id="bulkMes">
+                            <option value="6">Junho — 1ª Cota</option>
+                            <option value="7">Julho — 2ª Cota</option>
+                            <option value="10">Outubro — 3ª Cota</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Mês da inscrição <span class="required">*</span></label>
-                        <select id="inputMes">
-                            <option value="6">Junho — 1ª Cota (R$ 350)</option>
-                            <option value="7">Julho — 2ª Cota (R$ 400)</option>
-                            <option value="10">Outubro — 3ª Cota (R$ 450)</option>
+                        <label>Status padrão</label>
+                        <select id="bulkStatus">
+                            <option value="pendente">Pendente</option>
+                            <option value="parcial">Parcial</option>
+                            <option value="pago">Pago</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Plano de pagamento <span class="required">*</span></label>
-                    <select id="inputPlano"></select>
-                    <div class="help-text" id="planoHelpText"></div>
+                <div id="bulkPreviewContainer" style="display:none;">
+                    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">
+                        <i class="fas fa-eye"></i> Prévia (<span id="bulkPreviewCount">0</span> pessoas)
+                    </label>
+                    <div class="bulk-preview" id="bulkPreview"></div>
                 </div>
-                <div class="form-group" id="entradaGroup" style="display:none;">
-                    <label>Entrada</label>
-                    <input type="text" id="inputEntrada" readonly style="background:#eee;" />
-                </div>
-                <div class="form-group">
-                    <label>Status do pagamento</label>
-                    <select id="inputStatus">
-                        <option value="pendente">Pendente</option>
-                        <option value="parcial">Parcialmente Pago</option>
-                        <option value="pago">Pago</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Salvar Inscrito</button>
-            </form>
+                <button class="btn-submit success" onclick="processarCadastroEmMassa()">
+                    <i class="fas fa-users"></i> Cadastrar Todos
+                </button>
+            </div>
         </div>
+
+        <!-- MODAL PAGAMENTO -->
+        <div class="modal-overlay" id="payModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-credit-card"></i> Detalhes do Pagamento</h2>
+                    <button class="close-btn" onclick="closePayModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="payModalBody"></div>
+            </div>
+        </div>
+
+        <!-- TOAST -->
+        <div class="toast-container" id="toastContainer"></div>
     </div>
 
-    <!-- MODAL INSCRIÇÃO EM MASSA -->
-    <div class="modal-overlay" id="bulkModal">
-        <div class="modal wide">
-            <div class="modal-header">
-                <h2><i class="fas fa-users"></i> Inscrição em Massa</h2>
-                <button class="close-btn" onclick="closeBulkModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">
-                Cole os dados copiados da sua planilha. <strong>Formato:</strong> uma pessoa por linha, <strong>Nome; Idade</strong>.
-            </p>
-            <div class="form-group">
-                <label>Cole os dados aqui <span class="required">*</span></label>
-                <textarea id="bulkTextarea" placeholder="Maria da Silva; 25&#10;João Pedro; 30&#10;Ana Clara; 4&#10;Lucas; 8"></textarea>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Mês da inscrição <span class="required">*</span></label>
-                    <select id="bulkMes">
-                        <option value="6">Junho — 1ª Cota</option>
-                        <option value="7">Julho — 2ª Cota</option>
-                        <option value="10">Outubro — 3ª Cota</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Status padrão</label>
-                    <select id="bulkStatus">
-                        <option value="pendente">Pendente</option>
-                        <option value="parcial">Parcial</option>
-                        <option value="pago">Pago</option>
-                    </select>
-                </div>
-            </div>
-            <div id="bulkPreviewContainer" style="display:none;">
-                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">
-                    <i class="fas fa-eye"></i> Prévia (<span id="bulkPreviewCount">0</span> pessoas)
-                </label>
-                <div class="bulk-preview" id="bulkPreview"></div>
-            </div>
-            <button class="btn-submit success" onclick="processarCadastroEmMassa()">
-                <i class="fas fa-users"></i> Cadastrar Todos
-            </button>
-        </div>
-    </div>
-
-    <!-- MODAL PAGAMENTO -->
-    <div class="modal-overlay" id="payModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2><i class="fas fa-credit-card"></i> Detalhes do Pagamento</h2>
-                <button class="close-btn" onclick="closePayModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="payModalBody"></div>
-        </div>
-    </div>
-
-    <!-- TOAST -->
-    <div class="toast-container" id="toastContainer"></div>
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
         // =============================================================
-        //  CONFIG
+        //  CONFIG (cotas e regras de negócio – inalterado)
         // =============================================================
         const COTAS = {
             1: { nome: '1ª Cota', valorInteiro: 350, valorMeia: 175,
@@ -681,23 +642,30 @@
                     { id: '2x225', label: '2x de R$ 225', parcelas: 2, valorParcela: 225, entrada: 0 }
                 ], meses: [10] }
         };
-
         function getTipoPorIdade(idade) { return idade <= 5 ? 'isento' : idade <= 10 ? 'meia' : 'inteira'; }
+
+        // =============================================================
+        //  SUPABASE CONFIG
+        // =============================================================
+        const SUPABASE_URL = 'https://cdniazlmltczffsqggpa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkbmlhemxtbHRjemZmc3FnZ3BhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTQwNDEsImV4cCI6MjA5NzY5MDA0MX0.SevELVo9U0fzGtfCj-k8p2QfofnCh-nmH1pd3aBmbqQ';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // =============================================================
         //  STATE
         // =============================================================
+        let currentUser = null;
+        let currentUserName = '';
         let pessoas = [];
         let logAtividades = [];
-        let usuarioAtual = '';
+        let realtimeChannel = null;
+        let isSaving = false;
 
         // =============================================================
         //  HELPERS
         // =============================================================
         function getCotaByMes(mes) { for (const [k, v] of Object.entries(COTAS)) { if (v.meses.includes(parseInt(mes))) return parseInt(k); } return 1; }
-
         function getValorPorPessoa(p) { if (p.isento) return 0; const c = COTAS[p.cota]; return c ? (p.meia ? c.valorMeia : c.valorInteiro) : 0; }
-
         function getValorParcela(p) {
             if (!p || p.isento) return 0;
             const c = COTAS[p.cota];
@@ -706,7 +674,6 @@
             if (!plano) return 0;
             return p.meia ? Math.round(plano.valorParcela / 2) : plano.valorParcela;
         }
-
         function getValorTotalPago(p) {
             if (p.isento || p.status === 'pendente') return 0;
             if (p.status === 'pago') return getValorPorPessoa(p);
@@ -720,43 +687,308 @@
             }
             return 0;
         }
-
         function formatMoney(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
-
         function gerarId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+        function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+        function getUsuario() { return currentUserName || 'Anônimo'; }
 
-        function escHtml(s) { const d = document.createElement('div');
-            d.textContent = s; return d.innerHTML; }
-
-        function getUsuario() { return usuarioAtual || 'Anônimo'; }
-
-        // =============================================================
-        //  LOG DE ATIVIDADES
-        // =============================================================
-        function addLog(tipo, titulo, descricao) {
-            const entry = {
-                id: gerarId(),
-                tipo: tipo, // 'add', 'delete', 'payment', 'edit', 'bulk', 'info'
-                titulo: titulo,
-                descricao: descricao,
-                usuario: getUsuario(),
-                timestamp: new Date().toISOString(),
-                data: new Date().toLocaleString('pt-BR')
-            };
-            logAtividades.unshift(entry);
-            if (logAtividades.length > 500) logAtividades = logAtividades.slice(0, 500);
-            salvarLog();
-            renderizarLog();
-            document.getElementById('badgeLog').textContent = logAtividades.length;
+        function setConnStatus(state, text) {
+            const el = document.getElementById('connStatus');
+            const txt = document.getElementById('connStatusText');
+            if (!el) return;
+            el.classList.remove('offline', 'saving');
+            if (state === 'offline') el.classList.add('offline');
+            if (state === 'saving') el.classList.add('saving');
+            if (txt) txt.textContent = text;
         }
 
-        function salvarLog() { try { localStorage.setItem('rama_retiro_log', JSON.stringify(logAtividades)); } catch (e) {} }
+        function rowToPessoa(row) {
+            return {
+                id: row.id,
+                nome: row.nome,
+                idade: row.idade,
+                mes: row.mes,
+                cota: row.cota,
+                meia: row.meia,
+                isento: row.isento,
+                isentoManual: row.isento_manual,
+                planoId: row.plano_id,
+                status: row.status,
+                pagouEntrada: row.pagou_entrada,
+                parcelasPagas: row.parcelas_pagas || [],
+                createdAt: row.created_at
+            };
+        }
 
-        function carregarLog() {
-            try {
-                const raw = localStorage.getItem('rama_retiro_log');
-                if (raw) logAtividades = JSON.parse(raw);
-            } catch (e) { logAtividades = []; }
+        // =============================================================
+        //  AUTH
+        // =============================================================
+        async function init() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+                await setUser(session.user);
+                showMainApp();
+                await carregarDados();
+                await carregarLog();
+                subscribeRealtime();
+                setConnStatus('online', 'Online');
+            } else {
+                showLoginScreen();
+            }
+            supabase.auth.onAuthStateChange(async (event, session) => {
+                if (event === 'SIGNED_IN' && session?.user) {
+                    await setUser(session.user);
+                    showMainApp();
+                    await carregarDados();
+                    await carregarLog();
+                    subscribeRealtime();
+                } else if (event === 'SIGNED_OUT') {
+                    currentUser = null;
+                    currentUserName = '';
+                    pessoas = [];
+                    logAtividades = [];
+                    if (realtimeChannel) { supabase.removeChannel(realtimeChannel); realtimeChannel = null; }
+                    showLoginScreen();
+                }
+            });
+        }
+
+        async function setUser(user) {
+            currentUser = user;
+            // Usa nome do user_metadata, ou parte do email antes do @
+            currentUserName = user.user_metadata?.full_name
+                            || user.user_metadata?.name
+                            || (user.email ? user.email.split('@')[0] : 'Usuário');
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+            const errBox = document.getElementById('loginError');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+            errBox.classList.remove('show');
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                errBox.textContent = '❌ ' + (error.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : error.message);
+                errBox.classList.add('show');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+                return false;
+            }
+            return false; // impede submit padrão
+        }
+
+        async function handleLogout() {
+            if (!confirm('Sair do sistema?')) return;
+            await supabase.auth.signOut();
+            location.reload();
+        }
+
+        function abrirMenuUsuario() {
+            const acao = prompt(
+                `Logado como: ${currentUser?.email || ''}\n\n` +
+                `1️⃣ - Ver perfil\n` +
+                `2️⃣ - Sair\n\n` +
+                `Digite 1 ou 2:`
+            );
+            if (acao === '2') handleLogout();
+            else if (acao === '1') {
+                alert(`👤 ${currentUserName}\n📧 ${currentUser?.email}\n\nUsuário autenticado via Supabase Auth.`);
+            }
+        }
+
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+        }
+        function showMainApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            atualizarInterfaceUsuario();
+        }
+
+        function atualizarInterfaceUsuario() {
+            const display = document.getElementById('userNameDisplay');
+            const avatar = document.getElementById('userAvatar');
+            if (currentUserName) {
+                display.textContent = currentUserName;
+                avatar.textContent = currentUserName.charAt(0).toUpperCase();
+                document.getElementById('heroUserText').textContent =
+                    `Olá, ${currentUserName}! Acompanhe as inscrições, cotas e pagamentos. Todas as ações ficam registradas.`;
+            } else {
+                display.textContent = 'Usuário';
+                avatar.textContent = '?';
+            }
+        }
+
+        // =============================================================
+        //  DATA – SUPABASE
+        // =============================================================
+        async function carregarDados() {
+            const { data, error } = await supabase
+                .from('inscricoes')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (error) {
+                console.error('Erro ao carregar:', error);
+                showToast('Erro ao carregar dados: ' + error.message, 'error');
+                return;
+            }
+            pessoas = (data || []).map(rowToPessoa);
+            renderizar();
+            document.getElementById('badgeTodas').textContent = pessoas.length;
+        }
+
+        // Salva UMA pessoa (insert ou update)
+        async function salvarPessoaNoServidor(p) {
+            const row = {
+                id: p.id,
+                nome: p.nome,
+                idade: p.idade,
+                mes: p.mes,
+                cota: p.cota,
+                meia: !!p.meia,
+                isento: !!p.isento,
+                isento_manual: !!p.isentoManual,
+                plano_id: p.planoId || null,
+                status: p.status || 'pendente',
+                pagou_entrada: !!p.pagouEntrada,
+                parcelas_pagas: p.parcelasPagas || [],
+                updated_at: new Date().toISOString(),
+                updated_by: currentUser?.id || null
+            };
+            const { error } = await supabase.from('inscricoes').upsert(row);
+            if (error) throw error;
+        }
+
+        async function deletarPessoaNoServidor(id) {
+            const { error } = await supabase.from('inscricoes').delete().eq('id', id);
+            if (error) throw error;
+        }
+
+        // Wrapper usado pelo código legado – mantém compatibilidade
+        async function salvarDados() {
+            // Como já salvamos incrementalmente em cada operação,
+            // esta função é só uma garantia. Não precisa fazer nada aqui.
+            return true;
+        }
+
+        async function carregarLog() {
+            const { data, error } = await supabase
+                .from('log_atividades')
+                .select('*')
+                .order('timestamp', { ascending: false })
+                .limit(500);
+            if (error) {
+                console.error('Erro ao carregar log:', error);
+                return;
+            }
+            logAtividades = (data || []).map(row => ({
+                id: row.id,
+                tipo: row.tipo,
+                titulo: row.titulo,
+                descricao: row.descricao,
+                usuario: row.usuario,
+                timestamp: row.timestamp,
+                data: new Date(row.timestamp).toLocaleString('pt-BR')
+            }));
+            renderizarLog();
+        }
+
+        async function addLogEntry(tipo, titulo, descricao) {
+            const entry = {
+                id: gerarId(),
+                tipo, titulo, descricao,
+                usuario: currentUserName,
+                user_id: currentUser?.id || null,
+                timestamp: new Date().toISOString()
+            };
+            const { error } = await supabase.from('log_atividades').insert({
+                id: entry.id, tipo, titulo, descricao,
+                usuario: entry.usuario, user_id: entry.user_id, timestamp: entry.timestamp
+            });
+            if (error) console.error('Erro ao salvar log:', error);
+        }
+
+        // =============================================================
+        //  REALTIME – mudanças aparecem ao vivo pra todos
+        // =============================================================
+        function subscribeRealtime() {
+            if (realtimeChannel) supabase.removeChannel(realtimeChannel);
+
+            realtimeChannel = supabase
+                .channel('rama-changes-' + Date.now())
+                .on('postgres_changes',
+                    { event: '*', schema: 'public', table: 'inscricoes' },
+                    payload => handleInscricaoRealtime(payload))
+                .on('postgres_changes',
+                    { event: '*', schema: 'public', table: 'log_atividades' },
+                    payload => handleLogRealtime(payload))
+                .subscribe(status => {
+                    if (status === 'SUBSCRIBED') setConnStatus('online', 'Sincronizado');
+                    else setConnStatus('offline', 'Reconectando...');
+                });
+        }
+
+        function handleInscricaoRealtime(payload) {
+            const { eventType, new: newRow, old: oldRow } = payload;
+            // Ignora mudanças feitas pelo próprio usuário (evita piscar)
+            if (newRow?.updated_by === currentUser?.id) {
+                // ainda atualiza dados para garantir consistência
+            }
+
+            if (eventType === 'INSERT' || eventType === 'UPDATE') {
+                const pessoa = rowToPessoa(newRow);
+                const idx = pessoas.findIndex(p => p.id === pessoa.id);
+                if (idx >= 0) pessoas[idx] = pessoa;
+                else pessoas.push(pessoa);
+                flashRow(pessoa.id);
+            } else if (eventType === 'DELETE') {
+                pessoas = pessoas.filter(p => p.id !== oldRow.id);
+            }
+            renderizar();
+        }
+
+        function handleLogRealtime(payload) {
+            const { eventType, new: newRow, old: oldRow } = payload;
+            if (eventType === 'INSERT' && newRow) {
+                if (newRow.user_id === currentUser?.id) return; // ignora o próprio
+                logAtividades.unshift({
+                    id: newRow.id, tipo: newRow.tipo, titulo: newRow.titulo,
+                    descricao: newRow.descricao, usuario: newRow.usuario,
+                    timestamp: newRow.timestamp,
+                    data: new Date(newRow.timestamp).toLocaleString('pt-BR')
+                });
+                if (logAtividades.length > 500) logAtividades = logAtividades.slice(0, 500);
+                renderizarLog();
+                showToast(`📝 ${newRow.titulo} — por ${newRow.usuario}`, 'info');
+            } else if (eventType === 'DELETE') {
+                logAtividades = logAtividades.filter(l => l.id !== oldRow.id);
+                renderizarLog();
+            }
+        }
+
+        function flashRow(id) {
+            setTimeout(() => {
+                const tr = document.querySelector(`tr[data-id="${id}"]`);
+                if (tr) {
+                    tr.classList.add('row-changed');
+                    setTimeout(() => tr.classList.remove('row-changed'), 1500);
+                }
+            }, 50);
+        }
+
+        // =============================================================
+        //  LOG – interface (apenas leitura após mudar pra Supabase)
+        // =============================================================
+        async function addLog(tipo, titulo, descricao) {
+            await addLogEntry(tipo, titulo, descricao);
         }
 
         function renderizarLog() {
@@ -771,9 +1003,11 @@
             }
             empty.style.display = 'none';
             list.innerHTML = logAtividades.map(l => {
-                const iconMap = { add: 'fa-plus-circle add', delete: 'fa-trash-alt delete',
+                const iconMap = {
+                    add: 'fa-plus-circle add', delete: 'fa-trash-alt delete',
                     payment: 'fa-credit-card payment', edit: 'fa-pen edit',
-                    bulk: 'fa-users bulk', info: 'fa-info-circle info' };
+                    bulk: 'fa-users bulk', info: 'fa-info-circle info'
+                };
                 const ic = iconMap[l.tipo] || 'fa-info-circle info';
                 const [icClass, icColor] = ic.split(' ');
                 return `
@@ -792,7 +1026,7 @@
             }).join('');
         }
 
-        function exportLog() {
+        async function exportLog() {
             const txt = logAtividades.map(l =>
                 `[${l.data}] ${l.usuario} — ${l.titulo}: ${l.descricao}`
             ).join('\n');
@@ -806,119 +1040,35 @@
             showToast('Log exportado!', 'success');
         }
 
-        function clearLog() {
+        async function clearLog() {
             if (!confirm('Limpar todo o histórico de atividades?')) return;
-            logAtividades = [];
-            salvarLog();
-            renderizarLog();
-            showToast('Histórico limpo.', 'warning');
-        }
-
-        // =============================================================
-        //  USER IDENTIFICATION
-        // =============================================================
-        function openUserModal() {
-            document.getElementById('userModal').classList.add('open');
-            document.getElementById('inputUserName').value = usuarioAtual || '';
-            document.getElementById('inputUserName').focus();
-        }
-
-        function closeUserModal() { document.getElementById('userModal').classList.remove('open'); }
-
-        document.getElementById('userModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('userModal')) closeUserModal();
-        });
-
-        function salvarIdentificacao(e) {
-            e.preventDefault();
-            const nome = document.getElementById('inputUserName').value.trim();
-            if (!nome) { showToast('Informe seu nome.', 'error'); return; }
-            usuarioAtual = nome;
-            try { localStorage.setItem('rama_retiro_usuario', nome); } catch (e) {}
-            atualizarInterfaceUsuario();
-            closeUserModal();
-            addLog('info', 'Usuário identificado', `${nome} começou a usar o sistema.`);
-            showToast(`Bem-vindo(a), ${nome}! 🎉`, 'success');
-            return false;
-        }
-
-        function atualizarInterfaceUsuario() {
-            const display = document.getElementById('userNameDisplay');
-            const avatar = document.getElementById('userAvatar');
-            if (usuarioAtual) {
-                display.textContent = usuarioAtual;
-                avatar.textContent = usuarioAtual.charAt(0).toUpperCase();
-                document.getElementById('heroUserText').textContent =
-                    `Olá, ${usuarioAtual}! Acompanhe as inscrições, cotas e pagamentos. Todas as ações ficam registradas.`;
-            } else {
-                display.textContent = 'Identificar';
-                avatar.textContent = '?';
-                document.getElementById('heroUserText').textContent =
-                    'Acompanhe todas as inscrições, cotas e pagamentos. Clique no seu nome no topo para se identificar.';
+            setConnStatus('saving', 'Limpando...');
+            const { error } = await supabase.from('log_atividades').delete().neq('id', '___none___');
+            if (error) showToast('Erro: ' + error.message, 'error');
+            else {
+                logAtividades = [];
+                renderizarLog();
+                showToast('Histórico limpo.', 'warning');
             }
-        }
-
-        // =============================================================
-        //  PERSISTENCE
-        // =============================================================
-        function salvarDados() {
-            try { localStorage.setItem('rama_retiro_pessoas_v2', JSON.stringify(pessoas)); } catch (e) {}
-            sincronizarComServidor();
-        }
-
-        /** Envia os pagamentos para o Google Sheets (não bloqueia a tela) */
-        async function sincronizarComServidor() {
-            const url = localStorage.getItem('rama_webhook_url') || '';
-            if (!url) return;
-            try {
-                await fetch(url, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({
-                        action: 'savePagamentos',
-                        pessoas: pessoas.map(p => ({
-                            id: p.id,
-                            planoId: p.planoId || '',
-                            status: p.status || 'pendente',
-                            pagouEntrada: !!p.pagouEntrada,
-                            parcelasPagas: p.parcelasPagas || []
-                        }))
-                    })
-                });
-            } catch(e) {
-                console.warn('Sincronização em segundo plano falhou:', e.message);
-            }
-        }
-
-        function carregarDados() {
-            try {
-                const raw = localStorage.getItem('rama_retiro_pessoas_v2') || localStorage.getItem('rama_retiro_pessoas');
-                if (raw) {
-                    pessoas = JSON.parse(raw);
-                    pessoas.forEach(p => {
-                        if (p.isento === undefined) { const t = getTipoPorIdade(p.idade || 0);
-                            p.isento = (t === 'isento'); if (p.isento) p.meia = false; else if (t === 'meia') p.meia =
-                            true; }
-                        if (p.pagouEntrada === undefined) p.pagouEntrada = false;
-                    });
-                }
-            } catch (e) { pessoas = []; }
+            setConnStatus('online', 'Sincronizado');
         }
 
         // =============================================================
         //  FILTERS
         // =============================================================
-        function getFiltros() { return { status: document.getElementById('filtroStatus').value, tipo: document.getElementById(
-                    'filtroTipo').value, parcelas: document.getElementById('filtroParcelas').value }; }
-
+        function getFiltros() {
+            return {
+                status: document.getElementById('filtroStatus').value,
+                tipo: document.getElementById('filtroTipo').value,
+                parcelas: document.getElementById('filtroParcelas').value
+            };
+        }
         function limparFiltros() {
             document.getElementById('filtroStatus').value = 'todos';
             document.getElementById('filtroTipo').value = 'todos';
             document.getElementById('filtroParcelas').value = 'todas';
             renderizar();
         }
-
         function getPessoasFiltradas() {
             let lista = [...pessoas];
             const busca = (document.getElementById('searchInput').value || '').toLowerCase().trim();
@@ -937,8 +1087,10 @@
                         const pl = c?.planos.find(x => x.id === p.planoId);
                         return pl && (p.parcelasPagas?.length || 0) >= pl.parcelas;
                     });
-                } else { const n = parseInt(f.parcelas);
-                    lista = lista.filter(p => (p.parcelasPagas?.length || 0) === n); }
+                } else {
+                    const n = parseInt(f.parcelas);
+                    lista = lista.filter(p => (p.parcelasPagas?.length || 0) === n);
+                }
             }
             return lista;
         }
@@ -951,9 +1103,13 @@
             const tbody = document.getElementById('tableBody');
             const empty = document.getElementById('emptyState');
             document.getElementById('resultCount').textContent = lista.length;
-            if (lista.length === 0) { tbody.innerHTML = '';
-                empty.style.display = 'block'; } else { empty.style.display = 'none';
-                tbody.innerHTML = lista.map(p => renderRow(p)).join(''); }
+            if (lista.length === 0) {
+                tbody.innerHTML = '';
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                tbody.innerHTML = lista.map(p => renderRow(p)).join('');
+            }
             renderizarStats();
             document.getElementById('badgeTodas').textContent = pessoas.length;
         }
@@ -964,30 +1120,21 @@
             const isIsento = p.isento || false;
             const valor = isIsento ? 0 : getValorPorPessoa(p);
             const valorStr = isIsento ? 'Isento' : formatMoney(valor);
-            let tCls = 'inteira',
-                tLbl = 'Inteira';
-            if (isIsento) { tCls = 'isento';
-                tLbl = 'Isento'; } else if (p.meia) { tCls = 'meia';
-                tLbl = 'Meia'; }
-            let sCls = 'pendente',
-                sIcn = 'fa-clock',
-                sLbl = 'Pendente';
-            if (isIsento) { sCls = 'pago';
-                sIcn = 'fa-check-circle';
-                sLbl = 'Isento'; } else if (p.status === 'pago') { sCls = 'pago';
-                sIcn = 'fa-check-circle';
-                sLbl = 'Pago'; } else if (p.status === 'parcial') { sCls = 'parcial';
-                sIcn = 'fa-hourglass-half';
-                sLbl = 'Parcial'; }
+            let tCls = 'inteira', tLbl = 'Inteira';
+            if (isIsento) { tCls = 'isento'; tLbl = 'Isento'; }
+            else if (p.meia) { tCls = 'meia'; tLbl = 'Meia'; }
+            let sCls = 'pendente', sIcn = 'fa-clock', sLbl = 'Pendente';
+            if (isIsento) { sCls = 'pago'; sIcn = 'fa-check-circle'; sLbl = 'Isento'; }
+            else if (p.status === 'pago') { sCls = 'pago'; sIcn = 'fa-check-circle'; sLbl = 'Pago'; }
+            else if (p.status === 'parcial') { sCls = 'parcial'; sIcn = 'fa-hourglass-half'; sLbl = 'Parcial'; }
             const plano = cota.planos.find(pl => pl.id === p.planoId);
-            const valorParcela = getValorParcela(p);
             const parInfo = isIsento ? '-' : (plano ? `${p.parcelasPagas?.length||0}/${plano.parcelas}` : '-');
             const plLabel = isIsento ? '-' : (plano ? plano.label : '-');
             const cotaEx = isIsento ? `<span class="cota-badge isento-tag">Isento</span>` :
                 `<span class="cota-badge c${p.cota}">${p.cota}ª</span>`;
             const idad = p.idade !== null && p.idade !== undefined ? p.idade + ' anos' : '-';
             return `
-                <tr>
+                <tr data-id="${escHtml(p.id)}">
                     <td><strong>${escHtml(p.nome)}</strong></td>
                     <td>${idad}</td>
                     <td><span class="tipo-badge ${tCls}">${tLbl}</span></td>
@@ -1017,8 +1164,11 @@
             const pe = pessoas.filter(p => !p.isento && (p.status === 'pendente' || p.status === 'parcial')).length;
             const is = pessoas.filter(p => p.isento).length;
             let ar = 0;
-            pessoas.forEach(p => { if (p.isento) return; if (p.status === 'pago') ar += getValorPorPessoa(p); else if (p
-                    .status === 'parcial') ar += getValorTotalPago(p); });
+            pessoas.forEach(p => {
+                if (p.isento) return;
+                if (p.status === 'pago') ar += getValorPorPessoa(p);
+                else if (p.status === 'parcial') ar += getValorTotalPago(p);
+            });
             document.getElementById('statTotal').textContent = t;
             document.getElementById('statPago').textContent = pg;
             document.getElementById('statPendente').textContent = pe;
@@ -1036,9 +1186,8 @@
                 const view = btn.dataset.view;
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                ['viewInscritos', 'viewLog', 'viewConfig'].forEach(id => {
-                    document.getElementById(id).style.display = (id === 'view' + view.charAt(0).toUpperCase() +
-                        view.slice(1)) ? 'block' : 'none';
+                ['viewInscritos', 'viewLog'].forEach(id => {
+                    document.getElementById(id).style.display = (id === 'view' + view.charAt(0).toUpperCase() + view.slice(1)) ? 'block' : 'none';
                 });
             });
 
@@ -1048,32 +1197,9 @@
             document.getElementById('filtroParcelas').addEventListener('change', renderizar);
 
             const now = new Date();
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('pt-BR', { weekday: 'long',
-                year: 'numeric', month: 'long', day: 'numeric' });
-
-            // Load user
-            try { const u = localStorage.getItem('rama_retiro_usuario'); if (u) usuarioAtual = u; } catch (e) {}
-            atualizarInterfaceUsuario();
-
-            carregarDados();
-            carregarLog();
-            document.getElementById('inputMes').value = '6';
-            atualizarPlanos();
-            document.getElementById('appsScriptCode').textContent = appsScriptCode;
-            renderizar();
-            renderizarLog();
-
-            // Sincroniza automaticamente ao abrir o site, se webhook estiver configurado
-            const webhookSalvo = localStorage.getItem('rama_webhook_url') || '';
-            if (webhookSalvo) {
-                setTimeout(() => fetchFromWebhook(webhookSalvo, true), 800);
-            }
-
-            // Log first access
-            if (!localStorage.getItem('rama_retiro_primeiro_acesso')) {
-                try { localStorage.setItem('rama_retiro_primeiro_acesso', '1'); } catch (e) {}
-                addLog('info', 'Sistema iniciado', 'O sistema de controle do Retiro de Carnaval foi aberto.');
-            }
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('pt-BR', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
         });
 
         function switchToLog() {
@@ -1081,7 +1207,6 @@
             document.querySelector('[data-view="log"]').classList.add('active');
             document.getElementById('viewInscritos').style.display = 'none';
             document.getElementById('viewLog').style.display = 'block';
-            document.getElementById('viewConfig').style.display = 'none';
         }
 
         // =============================================================
@@ -1094,14 +1219,10 @@
             document.getElementById('entradaGroup').style.display = 'none';
             atualizarPlanos();
         }
-
         function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
-        document.getElementById('addModal').addEventListener('click', e => { if (e.target === document.getElementById(
-                    'addModal')) closeAddModal(); });
-        document.getElementById('payModal').addEventListener('click', e => { if (e.target === document.getElementById(
-                    'payModal')) closePayModal(); });
-        document.getElementById('bulkModal').addEventListener('click', e => { if (e.target === document.getElementById(
-                    'bulkModal')) closeBulkModal(); });
+        document.getElementById('addModal').addEventListener('click', e => { if (e.target === document.getElementById('addModal')) closeAddModal(); });
+        document.getElementById('payModal').addEventListener('click', e => { if (e.target === document.getElementById('payModal')) closePayModal(); });
+        document.getElementById('bulkModal').addEventListener('click', e => { if (e.target === document.getElementById('bulkModal')) closeBulkModal(); });
 
         // =============================================================
         //  PLANOS
@@ -1112,8 +1233,7 @@
             const cota = COTAS[cotaNum];
             const idade = parseInt(document.getElementById('inputIdade').value) || 0;
             const tipo = getTipoPorIdade(idade);
-            const isIsento = (tipo === 'isento'),
-                isMeia = (tipo === 'meia');
+            const isIsento = (tipo === 'isento'), isMeia = (tipo === 'meia');
             const sel = document.getElementById('inputPlano');
             sel.innerHTML = '';
             const ht = document.getElementById('planoHelpText');
@@ -1122,8 +1242,7 @@
 
             if (isIsento) {
                 const o = document.createElement('option');
-                o.value = 'isento';
-                o.textContent = 'Isento — Grátis';
+                o.value = 'isento'; o.textContent = 'Isento — Grátis';
                 sel.appendChild(o);
                 ht.textContent = 'Bebês e crianças até 5 anos são isentos(as).';
                 document.getElementById('entradaGroup').style.display = 'none';
@@ -1169,37 +1288,50 @@
         // =============================================================
         //  SAVE
         // =============================================================
-        function savePerson(e) {
+        async function savePerson(e) {
             e.preventDefault();
             const nome = document.getElementById('inputNome').value.trim();
             const idade = parseInt(document.getElementById('inputIdade').value);
             const mes = parseInt(document.getElementById('inputMes').value);
             const cotaNum = getCotaByMes(mes);
             const tipo = getTipoPorIdade(idade);
-            const isIsento = (tipo === 'isento'),
-                isMeia = (tipo === 'meia');
+            const isIsento = (tipo === 'isento'), isMeia = (tipo === 'meia');
             const planoId = isIsento ? 'isento' : document.getElementById('inputPlano').value;
             const status = isIsento ? 'pago' : document.getElementById('inputStatus').value;
-            if (!nome || isNaN(idade)) { showToast('Preencha todos os campos.', 'error'); return; }
+            if (!nome || isNaN(idade)) { showToast('Preencha todos os campos.', 'error'); return false; }
 
             const pessoa = {
-                id: gerarId(), nome, idade, mes, cota: cotaNum, meia: isMeia, isento: isIsento, planoId, status,
-                pagouEntrada: false,
+                id: gerarId(), nome, idade, mes, cota: cotaNum, meia: isMeia, isento: isIsento,
+                planoId, status, pagouEntrada: false,
                 parcelasPagas: (status === 'pago' && !isIsento) ? gerarTodasParcelas(cotaNum, planoId) : [],
                 createdAt: new Date().toISOString()
             };
+
             pessoas.push(pessoa);
-            salvarDados();
             renderizar();
             closeAddModal();
             const tipoLabel = isIsento ? ' (Isento)' : isMeia ? ' (Meia)' : '';
-            addLog('add', 'Inscrição adicionada', `${nome} — ${COTAS[cotaNum].nome}, R$ ${getValorPorPessoa(pessoa)},00${tipoLabel}`);
-            showToast(`${nome} inscrito(a) com sucesso!`, 'success');
+            showToast(`${nome} inscrito(a)! Sincronizando...`, 'success');
+
+            try {
+                setConnStatus('saving', 'Salvando...');
+                await salvarPessoaNoServidor(pessoa);
+                await addLog('add', 'Inscrição adicionada',
+                    `${nome} — ${COTAS[cotaNum].nome}, R$ ${getValorPorPessoa(pessoa)},00${tipoLabel}`);
+                setConnStatus('online', 'Sincronizado');
+            } catch (err) {
+                showToast('Erro ao salvar: ' + err.message, 'error');
+                setConnStatus('offline', 'Erro');
+                console.error(err);
+            }
             return false;
         }
 
-        function gerarTodasParcelas(cn, pi) { const c = COTAS[cn]; if (!c) return []; const pl = c.planos.find(x => x.id ===
-                pi); if (!pl) return []; const a = []; for (let i = 1; i <= pl.parcelas; i++) a.push(i); return a; }
+        function gerarTodasParcelas(cn, pi) {
+            const c = COTAS[cn]; if (!c) return [];
+            const pl = c.planos.find(x => x.id === pi); if (!pl) return [];
+            const a = []; for (let i = 1; i <= pl.parcelas; i++) a.push(i); return a;
+        }
 
         // =============================================================
         //  BULK
@@ -1212,7 +1344,6 @@
             document.getElementById('bulkPreviewContainer').style.display = 'none';
             bulkDadosParsed = [];
         }
-
         function closeBulkModal() { document.getElementById('bulkModal').classList.remove('open'); }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1223,8 +1354,10 @@
         function atualizarPreviewBulk() {
             const raw = document.getElementById('bulkTextarea').value.trim();
             const mes = parseInt(document.getElementById('bulkMes').value);
-            if (!raw) { document.getElementById('bulkPreviewContainer').style.display = 'none';
-                bulkDadosParsed = []; return; }
+            if (!raw) {
+                document.getElementById('bulkPreviewContainer').style.display = 'none';
+                bulkDadosParsed = []; return;
+            }
             const lines = raw.split('\n').filter(l => l.trim());
             const parsed = [];
             lines.forEach(line => {
@@ -1238,11 +1371,10 @@
                 const tipo = getTipoPorIdade(idade);
                 const cn = getCotaByMes(mes);
                 const c = COTAS[cn];
-                const ii = (tipo === 'isento'),
-                    im = (tipo === 'meia');
+                const ii = (tipo === 'isento'), im = (tipo === 'meia');
                 parsed.push({ nome, idade, tipo, isento: ii, meia: im, cota: cn,
-                    planoId: ii ? 'isento' : (c?.planos[0]?.id || ''), valor: ii ? 0 : (im ? c.valorMeia : c
-                        .valorInteiro) });
+                    planoId: ii ? 'isento' : (c?.planos[0]?.id || ''),
+                    valor: ii ? 0 : (im ? c.valorMeia : c.valorInteiro) });
             });
             bulkDadosParsed = parsed;
             document.getElementById('bulkPreviewCount').textContent = parsed.length;
@@ -1251,36 +1383,58 @@
                 document.getElementById('bulkPreview').innerHTML = parsed.map(p =>
                     `<div class="preview-item"><span><strong>${escHtml(p.nome)}</strong> - ${p.idade} anos</span><span>${p.isento?'<span class="tipo-badge isento">Isento</span>':p.meia?'<span class="tipo-badge meia">Meia</span>':'<span class="tipo-badge inteira">Inteira</span>'} ${p.isento?'':'R$ '+p.valor+',00'}</span></div>`
                 ).join('');
-            } else { document.getElementById('bulkPreviewContainer').style.display = 'none'; }
+            } else {
+                document.getElementById('bulkPreviewContainer').style.display = 'none';
+            }
         }
 
-        function processarCadastroEmMassa() {
+        async function processarCadastroEmMassa() {
             if (bulkDadosParsed.length === 0) { showToast('Nenhum dado válido.', 'error'); return; }
             const status = document.getElementById('bulkStatus').value;
             const mes = parseInt(document.getElementById('bulkMes').value);
-            let cad = 0,
-                ign = 0;
+            let cad = 0, ign = 0;
             const nomes = [];
+            const novosParaSalvar = [];
+
             bulkDadosParsed.forEach(d => {
-                if (pessoas.some(p => p.nome.toLowerCase() === d.nome.toLowerCase() && p.idade === d.idade)) { ign++; return; }
-                pessoas.push({
+                if (pessoas.some(p => p.nome.toLowerCase() === d.nome.toLowerCase() && p.idade === d.idade)) {
+                    ign++; return;
+                }
+                const nova = {
                     id: gerarId(), nome: d.nome, idade: d.idade, mes, cota: d.cota, meia: d.meia, isento: d.isento,
                     planoId: d.planoId, status: d.isento ? 'pago' : status,
                     pagouEntrada: false,
                     parcelasPagas: (status === 'pago' && !d.isento) ? gerarTodasParcelas(d.cota, d.planoId) : [],
                     createdAt: new Date().toISOString(), bulkImport: true
-                });
+                };
+                pessoas.push(nova);
+                novosParaSalvar.push(nova);
                 cad++;
                 nomes.push(d.nome);
             });
+
             if (cad > 0) {
-                salvarDados();
                 renderizar();
                 const listaNomes = nomes.length <= 3 ? nomes.join(', ') : `${nomes.slice(0,3).join(', ')} e mais ${nomes.length-3}`;
-                addLog('bulk', 'Inscrição em massa', `${cad} pessoa(s) cadastrada(s): ${listaNomes}${ign>0?' ('+ign+' duplicatas ignoradas)':''}`);
+                showToast(`${cad} cadastrado(s) localmente. Sincronizando...`, 'success');
                 closeBulkModal();
-                showToast(`${cad} cadastrado(s)! ${ign>0?'('+ign+' duplicatas)':''}`, 'success');
-            } else { showToast(`Nenhum novo. ${ign>0?'Todos já existem.':'Verifique os dados.'}`, 'warning'); }
+
+                try {
+                    setConnStatus('saving', `Salvando ${cad}...`);
+                    for (const p of novosParaSalvar) {
+                        await salvarPessoaNoServidor(p);
+                    }
+                    await addLog('bulk', 'Inscrição em massa',
+                        `${cad} pessoa(s) cadastrada(s): ${listaNomes}${ign>0?' ('+ign+' duplicatas ignoradas)':''}`);
+                    setConnStatus('online', 'Sincronizado');
+                    showToast(`✅ ${cad} sincronizado(s) com sucesso!`, 'success');
+                } catch (err) {
+                    showToast('Erro ao sincronizar: ' + err.message, 'error');
+                    setConnStatus('offline', 'Erro');
+                }
+            } else {
+                showToast(`Nenhum novo. ${ign>0?'Todos já existem.':'Verifique os dados.'}`, 'warning');
+            }
         }
 
         // =============================================================
@@ -1291,12 +1445,9 @@
             if (!p || p.isento) return;
             const cota = COTAS[p.cota];
             if (!cota) return;
-            const vt = getValorPorPessoa(p),
-                vp = getValorTotalPago(p),
-                saldo = vt - vp;
+            const vt = getValorPorPessoa(p), vp = getValorTotalPago(p), saldo = vt - vp;
             const plano = cota.planos.find(pl => pl.id === p.planoId);
             if (!plano) return;
-            const valorParcelaAtual = getValorParcela(p);
             const body = document.getElementById('payModalBody');
             let parHTML = '';
             if (plano.parcelas > 1) {
@@ -1305,8 +1456,7 @@
                     const ok = p.parcelasPagas?.includes(i);
                     items += `<div class="installment-item ${ok?'paid':'pending'}" onclick="toggleParcela('${p.id}',${i})" title="${ok?'Desmarcar':'Marcar'}"><span class="inst-num">${i}ª</span><span>${ok?'✓':'○'}</span><span style="font-size:10px;">${formatMoney(getValorParcela(p))}</span></div>`;
                 }
-                parHTML =
-                    `<div style="margin-top:16px;"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;"><i class="fas fa-credit-card"></i> Parcelas (clique)</label><div class="installment-grid">${items}</div></div>`;
+                parHTML = `<div style="margin-top:16px;"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;"><i class="fas fa-credit-card"></i> Parcelas (clique)</label><div class="installment-grid">${items}</div></div>`;
             }
             const tagTipo = p.meia ?
                 '<span style="background:#E0F2FE;padding:2px 10px;border-radius:50px;font-size:12px;font-weight:600;color:#0369A1;">Meia</span>' :
@@ -1342,7 +1492,7 @@
 
         function closePayModal() { document.getElementById('payModal').classList.remove('open'); }
 
-        function toggleParcela(id, num) {
+        async function toggleParcela(id, num) {
             const p = pessoas.find(x => x.id === id);
             if (!p) return;
             if (!p.parcelasPagas) p.parcelasPagas = [];
@@ -1351,22 +1501,28 @@
             else p.parcelasPagas.splice(idx, 1);
             p.parcelasPagas.sort((a, b) => a - b);
             atualizarStatusPorParcelas(p);
-            salvarDados();
             renderizar();
+
             const plano = COTAS[p.cota]?.planos.find(x => x.id === p.planoId);
-            addLog('payment', 'Parcela alterada', `${p.nome} — parcela ${num}ª ${p.parcelasPagas.includes(num)?'paga':'desmarcada'} (${p.parcelasPagas.length}/${plano?.parcelas||'?'})`);
+            addLog('payment', 'Parcela alterada',
+                `${p.nome} — parcela ${num}ª ${p.parcelasPagas.includes(num)?'paga':'desmarcada'} (${p.parcelasPagas.length}/${plano?.parcelas||'?'})`);
             abrirPagamento(id);
+            try {
+                await salvarPessoaNoServidor(p);
+            } catch (err) { showToast('Erro ao sincronizar: ' + err.message, 'error'); }
         }
 
-        function toggleEntrada(id) {
+        async function toggleEntrada(id) {
             const p = pessoas.find(x => x.id === id);
             if (!p) return;
             p.pagouEntrada = !p.pagouEntrada;
             atualizarStatusPorParcelas(p);
-            salvarDados();
             renderizar();
             addLog('payment', 'Entrada alterada', `${p.nome} — entrada ${p.pagouEntrada?'paga':'desmarcada'}`);
             abrirPagamento(id);
+            try {
+                await salvarPessoaNoServidor(p);
+            } catch (err) { showToast('Erro ao sincronizar: ' + err.message, 'error'); }
         }
 
         function atualizarStatusPorParcelas(p) {
@@ -1381,119 +1537,87 @@
             else p.status = 'pendente';
         }
 
-        function marcarPago(id) {
+        async function marcarPago(id) {
             const p = pessoas.find(x => x.id === id);
             if (!p) return;
             const c = COTAS[p.cota];
             const pl = c?.planos.find(x => x.id === p.planoId);
-            if (pl) { p.parcelasPagas = []; for (let i = 1; i <= pl.parcelas; i++) p.parcelasPagas.push(i); if (pl.entrada >
-                    0) p.pagouEntrada = true; }
+            if (pl) {
+                p.parcelasPagas = [];
+                for (let i = 1; i <= pl.parcelas; i++) p.parcelasPagas.push(i);
+                if (pl.entrada > 0) p.pagouEntrada = true;
+            }
             p.status = 'pago';
-            salvarDados();
             renderizar();
             addLog('payment', 'Pagamento confirmado', `${p.nome} — ${COTAS[p.cota].nome} marcada como PAGA.`);
             abrirPagamento(id);
             showToast(`${p.nome} — pago!`, 'success');
+            try {
+                await salvarPessoaNoServidor(p);
+            } catch (err) { showToast('Erro ao sincronizar: ' + err.message, 'error'); }
         }
 
-        function marcarPendente(id) {
+        async function marcarPendente(id) {
             const p = pessoas.find(x => x.id === id);
             if (!p) return;
             p.parcelasPagas = [];
             p.pagouEntrada = false;
             p.status = 'pendente';
-            salvarDados();
             renderizar();
             addLog('payment', 'Pagamento resetado', `${p.nome} — status voltou para pendente.`);
             abrirPagamento(id);
             showToast(`${p.nome} — resetado.`, 'warning');
+            try {
+                await salvarPessoaNoServidor(p);
+            } catch (err) { showToast('Erro ao sincronizar: ' + err.message, 'error'); }
         }
 
-        function marcarIsentoManual(id) {
+        async function toggleIsentoRapido(id) {
             const p = pessoas.find(x => x.id === id);
             if (!p) return;
 
             if (p.isentoManual) {
-                if (!confirm(`Remover o isento manual de "${p.nome}"?`)) return;
-                
                 p.isento = false;
                 p.isentoManual = false;
                 p.status = 'pendente';
                 p.planoId = COTAS[p.cota]?.planos[0]?.id || '7x50';
                 p.parcelasPagas = [];
                 p.pagouEntrada = false;
-                
-                salvarDados();
-                renderizar();
-                addLog('payment', 'Isento manual removido', `${p.nome} — isento manual foi desfeito.`);
-                closePayModal();
-                showToast(`${p.nome} voltou para status normal.`, 'warning');
-                return;
-            }
-
-            if (!confirm(`Marcar "${p.nome}" como ISENTO MANUAL (Ato de Amor)?`)) return;
-            
-            p.isento = true;
-            p.isentoManual = true;
-            p.status = 'pago';
-            p.planoId = 'isento';
-            p.parcelasPagas = [];
-            p.pagouEntrada = false;
-            
-            salvarDados();
-            renderizar();
-            addLog('payment', 'Isento manual (Ato de Amor)', `${p.nome} — marcado como isento por decisão da equipe.`);
-            closePayModal();
-            showToast(`${p.nome} agora é isento(a)! ❤️`, 'success');
-        }
-
-        function toggleIsentoRapido(id) {
-            const p = pessoas.find(x => x.id === id);
-            if (!p) return;
-
-            if (p.isentoManual) {
-                // Desfazer isento
-                p.isento = false;
-                p.isentoManual = false;
-                p.status = 'pendente';
-                p.planoId = COTAS[p.cota]?.planos[0]?.id || '7x50';
-                p.parcelasPagas = [];
-                p.pagouEntrada = false;
-
-                salvarDados();
                 renderizar();
                 addLog('payment', 'Isento manual removido', `${p.nome} — isento manual foi desfeito.`);
                 showToast(`${p.nome} voltou ao normal.`, 'warning');
             } else {
-                // Marcar como isento
+                if (!confirm(`Marcar "${p.nome}" como ISENTO MANUAL (Ato de Amor)?`)) return;
                 p.isento = true;
                 p.isentoManual = true;
                 p.status = 'pago';
                 p.planoId = 'isento';
                 p.parcelasPagas = [];
                 p.pagouEntrada = false;
-
-                salvarDados();
                 renderizar();
                 addLog('payment', 'Isento manual (Ato de Amor)', `${p.nome} — marcado como isento por decisão da equipe.`);
                 showToast(`${p.nome} agora é isento(a)! ❤️`, 'success');
             }
+            try {
+                await salvarPessoaNoServidor(p);
+            } catch (err) { showToast('Erro ao sincronizar: ' + err.message, 'error'); }
         }
 
         // =============================================================
         //  DELETE
         // =============================================================
-        function deletarPessoa(id) {
+        async function deletarPessoa(id) {
             const p = pessoas.find(x => x.id === id);
             if (!p) return;
             if (!confirm(`Remover "${p.nome}"?`)) return;
-            const nome = p.nome,
-                cota = COTAS[p.cota]?.nome || '';
+            const nome = p.nome, cota = COTAS[p.cota]?.nome || '';
             pessoas = pessoas.filter(x => x.id !== id);
-            salvarDados();
             renderizar();
             addLog('delete', 'Inscrição removida', `${nome} foi removido(a) da ${cota}.`);
             showToast(`${nome} removido(a).`, 'warning');
+            try {
+                await deletarPessoaNoServidor(id);
+            } catch (err) { showToast('Erro ao sincronizar: ' + err.message, 'error'); }
         }
 
         // =============================================================
@@ -1501,140 +1625,67 @@
         // =============================================================
         function showToast(msg, type = 'success') {
             const c = document.getElementById('toastContainer');
+            if (!c) return;
             const t = document.createElement('div');
             t.className = 'toast ' + type;
-            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle',
-                info: 'fa-info-circle' };
+            const icons = {
+                success: 'fa-check-circle', error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle', info: 'fa-info-circle'
+            };
             t.innerHTML = `<i class="fas ${icons[type]||icons.success}"></i> ${msg}`;
             c.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0';
+            setTimeout(() => {
+                t.style.opacity = '0';
                 t.style.transform = 'translateX(40px)';
                 t.style.transition = 'all .3s';
-                setTimeout(() => t.remove(), 300); }, 3500);
+                setTimeout(() => t.remove(), 300);
+            }, 3500);
         }
 
         // =============================================================
-        //  GOOGLE SHEETS
+        //  SAMPLE DATA (carrega direto no Supabase)
         // =============================================================
-        function importFromSheet() {
-            const urlAtual = localStorage.getItem('rama_webhook_url') || '';
-            
-            const mensagem = urlAtual 
-                ? `URL atual:\n${urlAtual}\n\nCole uma nova URL (ou deixe igual para usar a atual):`
-                : 'Cole a URL do Webhook do Google Apps Script:\nEx: https://script.google.com/macros/s/SEU_ID/exec';
-            
-            const r = prompt(mensagem, urlAtual);
-            
-            if (r && r.trim()) {
-                localStorage.setItem('rama_webhook_url', r.trim());
-                fetchFromWebhook(r.trim());
-            } else if (!urlAtual) {
-                showToast('URL não fornecida.', 'warning');
-            } else {
-                // Usuário cancelou mas já tinha URL salva
-                fetchFromWebhook(urlAtual);
-            }
-        }
-
-        async function fetchFromWebhook(url, silencioso) {
-            if (!silencioso) showToast('Sincronizando com Google Sheets...', 'warning');
+        async function loadSampleData() {
+            if (!confirm('Carregar dados de exemplo? Eles serão salvos no servidor.')) return;
+            const samples = [
+                { nome: 'Ana Beatriz Oliveira', idade: 28, mes: 6, meia: false, isento: false, planoId: '7x50', status: 'pago', parcelasPagas: [1,2,3,4,5,6,7], pagouEntrada: false },
+                { nome: 'Carlos Eduardo Santos', idade: 34, mes: 7, meia: false, isento: false, planoId: 'entrada+6x50', status: 'parcial', parcelasPagas: [1,2,3], pagouEntrada: true },
+                { nome: 'Maria Clara Lima', idade: 8, mes: 6, meia: true, isento: false, planoId: '7x50', status: 'pendente', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'João Pedro Almeida', idade: 15, mes: 10, meia: false, isento: false, planoId: '2x225', status: 'pago', parcelasPagas: [1,2], pagouEntrada: false },
+                { nome: 'Sofia Costa Martins', idade: 42, mes: 6, meia: false, isento: false, planoId: '7x50', status: 'parcial', parcelasPagas: [1,2,3,4], pagouEntrada: false },
+                { nome: 'Lucas Gabriel Pereira', idade: 10, mes: 7, meia: true, isento: false, planoId: 'entrada+6x50', status: 'pendente', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'Fernanda Rocha Silva', idade: 22, mes: 10, meia: false, isento: false, planoId: 'avista', status: 'pago', parcelasPagas: [1], pagouEntrada: false },
+                { nome: 'Enzo Miguel Santos', idade: 3, mes: 6, meia: false, isento: true, planoId: 'isento', status: 'pago', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'Valentina Souza Lima', idade: 5, mes: 7, meia: false, isento: true, planoId: 'isento', status: 'pago', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'Rafaela Mendes Dias', idade: 19, mes: 7, meia: false, isento: false, planoId: 'entrada+6x50', status: 'pendente', parcelasPagas: [], pagouEntrada: false },
+                { nome: 'Gabriel Araújo Nunes', idade: 47, mes: 10, meia: false, isento: false, planoId: '2x225', status: 'parcial', parcelasPagas: [1], pagouEntrada: false },
+                { nome: 'Helena Cardoso Ribeiro', idade: 7, mes: 10, meia: true, isento: false, planoId: '2x225', status: 'pendente', parcelasPagas: [], pagouEntrada: false }
+            ];
+            setConnStatus('saving', 'Carregando exemplos...');
             try {
-                const resp = await fetch(url + '?action=getInscricoes');
-                if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                const data = await resp.json();
-                if (data && data.inscricoes && Array.isArray(data.inscricoes)) {
-                    let novos = 0, atualizados = 0;
-                    data.inscricoes.forEach(item => {
-                        if (!item.nome || !item.id) return;
-                        const idade = parseInt(item.idade) || 0;
-                        const mes   = parseInt(item.mes)   || 6;
-                        const cn    = item.cota || getCotaByMes(mes);
-                        const tipo  = getTipoPorIdade(idade);
-                        const ii    = (tipo === 'isento'), im = (tipo === 'meia');
-                        const c     = COTAS[cn];
-
-                        // Verifica se já existe pelo ID estável vindo do servidor
-                        const existente = pessoas.find(p => p.id === item.id);
-
-                        if (existente) {
-                            // Atualiza pagamentos com os dados do servidor (fonte de verdade)
-                            existente.planoId       = item.planoId       || existente.planoId;
-                            existente.status        = item.status        || existente.status;
-                            existente.pagouEntrada  = item.pagouEntrada  !== undefined ? item.pagouEntrada : existente.pagouEntrada;
-                            existente.parcelasPagas = item.parcelasPagas?.length ? item.parcelasPagas : existente.parcelasPagas;
-                            atualizados++;
-                        } else {
-                            // Inscrito novo — adiciona com todos os dados do servidor
-                            pessoas.push({
-                                id:            item.id,
-                                nome:          item.nome.trim(),
-                                idade:         idade,
-                                mes:           mes,
-                                cota:          cn,
-                                meia:          item.meia || im,
-                                isento:        ii,
-                                planoId:       item.planoId || (ii ? 'isento' : (c?.planos[0]?.id || '')),
-                                status:        item.status  || (ii ? 'pago' : 'pendente'),
-                                pagouEntrada:  item.pagouEntrada  || false,
-                                parcelasPagas: item.parcelasPagas || [],
-                                createdAt:     new Date().toISOString(),
-                                imported:      true
-                            });
-                            novos++;
-                        }
-                    });
-                    // Salva localmente sem reenviar ao servidor (evita loop)
-                    try { localStorage.setItem('rama_retiro_pessoas_v2', JSON.stringify(pessoas)); } catch (e) {}
-                    renderizar();
-                    const msg = `${novos} novo(s), ${atualizados} atualizado(s).`;
-                    addLog('info', 'Sincronização Google Sheets', msg);
-                    if (!silencioso) showToast('Sincronizado! ' + msg, 'success');
-                } else if (data && data.erro) {
-                    showToast('Erro da planilha: ' + data.erro, 'error');
-                    console.error('Erro do servidor:', data.erro);
-                } else {
-                    showToast('Formato inesperado na resposta.', 'error');
+                for (const s of samples) {
+                    const p = {
+                        id: gerarId(), nome: s.nome, idade: s.idade, mes: s.mes,
+                        cota: getCotaByMes(s.mes), meia: s.meia, isento: s.isento,
+                        planoId: s.planoId, status: s.status,
+                        pagouEntrada: s.pagouEntrada, parcelasPagas: s.parcelasPagas,
+                        createdAt: new Date().toISOString()
+                    };
+                    pessoas.push(p);
+                    await salvarPessoaNoServidor(p);
                 }
+                renderizar();
+                await addLog('info', 'Dados de exemplo', `${samples.length} inscritos de exemplo carregados.`);
+                setConnStatus('online', 'Sincronizado');
+                showToast(`${samples.length} exemplos carregados!`, 'success');
             } catch (err) {
-                if (!silencioso) showToast('Erro ao sincronizar: ' + err.message, 'error');
-                console.error('fetchFromWebhook:', err);
+                showToast('Erro: ' + err.message, 'error');
+                setConnStatus('offline', 'Erro');
             }
         }
 
         // =============================================================
-        //  APPS SCRIPT CODE
-        // =============================================================
-        const appsScriptCode = `/** Rama Xerem - Retiro Carnaval */
-const WEBHOOK_URL = 'SEU_WEBHOOK_AQUI';
-function importarDados(e) {
-  var v = e.values, nome = v[2]||'', idade = parseInt(v[3])||0;
-  if(!nome) return;
-  var mes = new Date(v[1]).getMonth()+1;
-  UrlFetchApp.fetch(WEBHOOK_URL, {method:'post',contentType:'application/json',payload:JSON.stringify({nome,idade,mes}),muteHttpExceptions:true});
-}
-function doGet(e) {
-  if((e||{}).parameter&&e.parameter.action=='getInscricoes') return getInscricoes();
-  return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
-}
-function getInscricoes() {
-  var s = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getDataRange().getValues(), r = [];
-  for(var i=1;i<s.length;i++) if(s[i][1]) r.push({nome:s[i][1],idade:s[i][2]||0,mes:s[i][3]||6,dataInscricao:s[i][0]?s[i][0].toString():''});
-  return ContentService.createTextOutput(JSON.stringify({inscricoes:r})).setMimeType(ContentService.MimeType.JSON);
-}`;
-
-        function copyAppsScript() {
-            navigator.clipboard.writeText(appsScriptCode).then(() => showToast('Código copiado!', 'success')).catch(
-            () => { const ta = document.createElement('textarea');
-                ta.value = appsScriptCode;
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand('copy');
-                ta.remove();
-                showToast('Código copiado!', 'success'); });
-        }
-
-        // =============================================================
-        //  EXPORT / IMPORT / CLEAR
+        //  EXPORT JSON (exporta os dados atuais em um arquivo)
         // =============================================================
         function exportJSON() {
             const data = JSON.stringify({ pessoas, exportadoEm: new Date().toISOString() }, null, 2);
@@ -1648,80 +1699,10 @@ function getInscricoes() {
             showToast('Dados exportados!', 'success');
         }
 
-        function importJSON() { document.getElementById('jsonFileInput').click(); }
-
-        function handleJSONImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const r = new FileReader();
-            r.onload = (e) => {
-                try {
-                    const d = JSON.parse(e.target.result);
-                    if (d.pessoas && Array.isArray(d.pessoas)) {
-                        pessoas = d.pessoas;
-                        pessoas.forEach(p => { if (p.isento === undefined) p.isento = getTipoPorIdade(p.idade) ===
-                                'isento'; if (p.pagouEntrada === undefined) p.pagouEntrada = false; });
-                        salvarDados();
-                        renderizar();
-                        addLog('info', 'Dados importados', `${pessoas.length} inscrito(s) importados de arquivo JSON.`);
-                        showToast(`${pessoas.length} inscrito(s) importados!`, 'success');
-                    } else showToast('Arquivo inválido.', 'error');
-                } catch (err) { showToast('Erro: ' + err.message, 'error'); }
-            };
-            r.readAsText(file);
-            event.target.value = '';
-        }
-
-        function clearAllData() {
-            if (!confirm('TEM CERTEZA? Todos os dados serão perdidos!')) return;
-            if (!confirm('Confirmação final?')) return;
-            pessoas = [];
-            salvarDados();
-            renderizar();
-            addLog('info', 'Dados limpos', 'Todos os inscritos foram removidos do sistema.');
-            showToast('Dados removidos.', 'warning');
-        }
-
         // =============================================================
-        //  SAMPLE DATA
+        //  INIT
         // =============================================================
-        function loadSampleData() {
-            const samples = [
-                { nome: 'Ana Beatriz Oliveira', idade: 28, mes: 6, meia: false, isento: false, planoId: '7x50', status: 'pago',
-                    parcelasPagas: [1, 2, 3, 4, 5, 6, 7], pagouEntrada: false },
-                { nome: 'Carlos Eduardo Santos', idade: 34, mes: 7, meia: false, isento: false,
-                    planoId: 'entrada+6x50', status: 'parcial', parcelasPagas: [1, 2, 3], pagouEntrada: true },
-                { nome: 'Maria Clara Lima', idade: 8, mes: 6, meia: true, isento: false, planoId: '7x50',
-                    status: 'pendente', parcelasPagas: [], pagouEntrada: false },
-                { nome: 'João Pedro Almeida', idade: 15, mes: 10, meia: false, isento: false, planoId: '2x225',
-                    status: 'pago', parcelasPagas: [1, 2], pagouEntrada: false },
-                { nome: 'Sofia Costa Martins', idade: 42, mes: 6, meia: false, isento: false, planoId: '7x50',
-                    status: 'parcial', parcelasPagas: [1, 2, 3, 4], pagouEntrada: false },
-                { nome: 'Lucas Gabriel Pereira', idade: 10, mes: 7, meia: true, isento: false, planoId: 'entrada+6x50',
-                    status: 'pendente', parcelasPagas: [], pagouEntrada: false },
-                { nome: 'Fernanda Rocha Silva', idade: 22, mes: 10, meia: false, isento: false, planoId: 'avista',
-                    status: 'pago', parcelasPagas: [1], pagouEntrada: false },
-                { nome: 'Enzo Miguel Santos', idade: 3, mes: 6, meia: false, isento: true, planoId: 'isento',
-                    status: 'pago', parcelasPagas: [], pagouEntrada: false },
-                { nome: 'Valentina Souza Lima', idade: 5, mes: 7, meia: false, isento: true, planoId: 'isento',
-                    status: 'pago', parcelasPagas: [], pagouEntrada: false },
-                { nome: 'Rafaela Mendes Dias', idade: 19, mes: 7, meia: false, isento: false, planoId: 'entrada+6x50',
-                    status: 'pendente', parcelasPagas: [], pagouEntrada: false },
-                { nome: 'Gabriel Araújo Nunes', idade: 47, mes: 10, meia: false, isento: false, planoId: '2x225',
-                    status: 'parcial', parcelasPagas: [1], pagouEntrada: false },
-                { nome: 'Helena Cardoso Ribeiro', idade: 7, mes: 10, meia: true, isento: false, planoId: '2x225',
-                    status: 'pendente', parcelasPagas: [], pagouEntrada: false }
-            ];
-            samples.forEach(s => { s.id = gerarId();
-                s.createdAt = new Date().toISOString();
-                s.cota = getCotaByMes(s.mes);
-                pessoas.push(s); });
-            salvarDados();
-            renderizar();
-            addLog('info', 'Dados de exemplo', `${samples.length} inscritos de exemplo carregados para teste.`);
-            showToast(`${samples.length} exemplos carregados!`, 'success');
-        }
+        init();
     </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0ffd5fb993bdf4f',t:'MTc4MjE3OTM2Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
