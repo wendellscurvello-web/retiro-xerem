@@ -649,7 +649,27 @@
         // =============================================================
         const SUPABASE_URL = 'https://cdniazlmltczffsqggpa.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkbmlhemxtbHRjemZmc3FnZ3BhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTQwNDEsImV4cCI6MjA5NzY5MDA0MX0.SevELVo9U0fzGtfCj-k8p2QfofnCh-nmH1pd3aBmbqQ';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let supabase = null;
+        try {
+            if (typeof window.supabase === 'undefined') {
+                throw new Error('Biblioteca Supabase não carregou. Verifique sua internet (CDN pode estar bloqueado).');
+            }
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log('%c✅ Supabase conectado:', 'color:green;font-weight:bold', SUPABASE_URL);
+        } catch (err) {
+            console.error('%c❌ Erro Supabase:', 'color:red;font-weight:bold', err);
+            document.addEventListener('DOMContentLoaded', () => {
+                const errBox = document.getElementById('loginError');
+                if (errBox) { errBox.textContent = '⚠️ Erro técnico: ' + err.message + ' (veja o console com F12)'; errBox.classList.add('show'); }
+                const btn = document.getElementById('loginBtn');
+                if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro'; }
+            });
+        }
+
+        function showLoginError(msg) {
+            const errBox = document.getElementById('loginError');
+            if (errBox) { errBox.textContent = msg; errBox.classList.add('show'); }
+        }
 
         // =============================================================
         //  STATE
@@ -762,26 +782,57 @@
         }
 
         async function handleLogin(e) {
-            e.preventDefault();
+            if (e) { e.preventDefault(); e.stopPropagation?.(); }
+
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const btn = document.getElementById('loginBtn');
             const errBox = document.getElementById('loginError');
 
+            if (!supabase) {
+                showLoginError('⚠️ Sistema não inicializou. Pressione F5 para recarregar.');
+                return false;
+            }
+            if (!email || !password) {
+                showLoginError('⚠️ Preencha e-mail e senha.');
+                return false;
+            }
+
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
             errBox.classList.remove('show');
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            console.log('🔐 Tentando login:', email);
 
-            if (error) {
-                errBox.textContent = '❌ ' + (error.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : error.message);
-                errBox.classList.add('show');
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+                if (error) {
+                    console.error('❌ Erro de autenticação:', error);
+                    let msg = error.message;
+                    if (msg.includes('Invalid login credentials')) {
+                        msg = 'E-mail ou senha incorretos.';
+                    } else if (msg.includes('Email not confirmed')) {
+                        msg = 'E-mail NÃO CONFIRMADO. Vá no Supabase (Authentication → Users) e clique em "Confirm email" no usuário.';
+                    } else if (msg.includes('User not found')) {
+                        msg = 'Usuário não encontrado. Crie a conta no Supabase antes de logar.';
+                    } else if (msg.toLowerCase().includes('rate limit')) {
+                        msg = 'Muitas tentativas. Aguarde 1 minuto e tente de novo.';
+                    }
+                    showLoginError('❌ ' + msg);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+                } else {
+                    console.log('✅ Login bem-sucedido:', data.user?.email);
+                    // onAuthStateChange cuida do resto
+                }
+            } catch (err) {
+                console.error('❌ Erro inesperado:', err);
+                showLoginError('❌ Erro inesperado: ' + err.message);
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
-                return false;
             }
-            return false; // impede submit padrão
+            return false;
         }
 
         async function handleLogout() {
@@ -1704,5 +1755,5 @@
         // =============================================================
         init();
     </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a10c7a9a288e1472',t:'MTc4MjMxMTkzNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
